@@ -1,4 +1,4 @@
-function getRandomIntInclusive (from = 'передаваемое ПЕРВОЕ число', to = 'не должно быть <= СЛЕДУЮЩЕГО' ) {
+function getRandomIntInclusive (from = 'передаваемое ПЕРВОЕ число', to = 'не должно быть >= СЛЕДУЮЩЕГО' ) {
   if (from < to) {
     const min = Math.floor(Math.min(from, to));
     const max = Math.floor(Math.max(from, to));
