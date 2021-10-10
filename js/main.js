@@ -32,34 +32,29 @@ const userListComments = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-const generateData = [];
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 , 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
 
-function getCommentForArray (id, avatar, message, name) {
-  this.id = id;
-  this.avatar = avatar;
-  this.message = message;
-  this.name = name;
-}
+const AMOUNT_OF_GENERATE_USER_COMMENTS = 3;
+const AMOUNT_OF_GENERATE_OBJECTS = 25;
 
-function getComment () {
-  const listOfUsersComments = [];
-  for (let index = 1; index <= getRandomIntInclusive(1, 5); index++) {
-    const usersComments = new getCommentForArray (getRandomIntInclusive(1, 1000), `img/avatar-${  getRandomIntInclusive(1, 6)  }.svg`, userListComments[getRandomIntInclusive(0, userListComments.length - 1)], userNames[getRandomIntInclusive(0, userNames.length - 1)]);
-    listOfUsersComments.push(usersComments);
-  }
-  return listOfUsersComments;
-}
+const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, elements.length - 1)];
 
-function getObjectForArray (id, url, description, likes, comments) {
-  this.id = id;
-  this.url = url;
-  this.description = description;
-  this.likes = likes;
-  this.comments = comments;
-}
+const createObjectForComments = () => ({
+  id: getRandomIntInclusive(1, 1000),
+  avatar: `img/avatar-${  getRandomIntInclusive(1, 6)  }.svg`,
+  message: getRandomArrayElement(userListComments),
+  name: getRandomArrayElement(userNames),
+});
 
-for (let index = 1; index <= 25; index++) {
-  const generatedNewObject = new getObjectForArray (index, `photos/${  index  }.jpg`, `Cool photo ${  index}`, getRandomIntInclusive(15, 200), getComment());
-  generateData.push(generatedNewObject);
-}
+const userComments = Array.from({length: AMOUNT_OF_GENERATE_USER_COMMENTS}, createObjectForComments);
 
+const getObjectForArray = () => ({
+  id: getRandomIntInclusive(numbers[0], numbers.length - 1),
+  url: `photos/${  getRandomIntInclusive(numbers[0], numbers.length - 1)  }.jpg`,
+  description: 'Cool photo',
+  likes: getRandomIntInclusive (15, 200),
+  comments: userComments,
+});
+
+const userCommentsForMainArray = Array.from({length: AMOUNT_OF_GENERATE_OBJECTS}, getObjectForArray);
+userCommentsForMainArray;
