@@ -32,12 +32,18 @@ const userListComments = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 , 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
-
 const AMOUNT_OF_GENERATE_USER_COMMENTS = 3;
 const AMOUNT_OF_GENERATE_OBJECTS = 25;
 
 const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, elements.length - 1)];
+
+const getRandomNotRepeat = (amount) => {
+  const items = [...Array(amount)].map((it, index) => index + 1);
+  items.sort(() => Math.random() - 0.5);
+  return () => items.pop();
+};
+const getItemForId = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
+const getItemForUrl = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
 
 const createObjectForComments = () => ({
   id: getRandomIntInclusive(1, 1000),
@@ -49,8 +55,8 @@ const createObjectForComments = () => ({
 const userComments = Array.from({length: AMOUNT_OF_GENERATE_USER_COMMENTS}, createObjectForComments);
 
 const getObjectForArray = () => ({
-  id: getRandomIntInclusive(numbers[0], numbers.length - 1),
-  url: `photos/${  getRandomIntInclusive(numbers[0], numbers.length - 1)  }.jpg`,
+  id: getItemForId(),
+  url: `photos/${  getItemForUrl() }.jpg`,
   description: 'Cool photo',
   likes: getRandomIntInclusive (15, 200),
   comments: userComments,
