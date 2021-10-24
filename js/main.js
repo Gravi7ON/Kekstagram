@@ -1,1 +1,1 @@
-import './data.js';
+import './rendering-of-thumbnails.js';

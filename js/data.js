@@ -47,4 +47,5 @@ const getObjectForArray = () => ({
 });
 
 const userCommentsForMainArray = Array.from({length: AMOUNT_OF_GENERATE_OBJECTS}, getObjectForArray);
-userCommentsForMainArray;
+
+export {userCommentsForMainArray};
