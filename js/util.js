@@ -13,9 +13,4 @@ const getRandomNotRepeat = (amount) => {
 };
 getRandomNotRepeat();
 
-function checkLengthString (stringName, maxLength) {
-  return stringName.length <= maxLength;
-}
-checkLengthString();
-
 export {getRandomIntInclusive, getRandomNotRepeat};
