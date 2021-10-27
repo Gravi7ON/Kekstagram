@@ -28,6 +28,7 @@ const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, el
 
 const getItemForId = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
 const getItemForUrl = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
+const getItemForDescription = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
 
 const createObjectForComments = () => ({
   id: getRandomIntInclusive(1, 1000),
@@ -41,11 +42,11 @@ const userComments = Array.from({length: AMOUNT_OF_GENERATE_USER_COMMENTS}, crea
 const getObjectForArray = () => ({
   id: getItemForId(),
   url: `photos/${  getItemForUrl() }.jpg`,
-  description: 'Cool photo',
+  description: `Cool photo №${ getItemForDescription() }!!!`,
   likes: getRandomIntInclusive (15, 200),
   comments: userComments,
 });
 
 const userCommentsForMainArray = Array.from({length: AMOUNT_OF_GENERATE_OBJECTS}, getObjectForArray);
 
-export {userCommentsForMainArray};
+export {userCommentsForMainArray, userComments};

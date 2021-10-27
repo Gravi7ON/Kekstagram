@@ -1,4 +1,3 @@
-import './rendering-of-big-image.js';
 import {userCommentsForMainArray} from './data.js';
 
 const renderingThumbnails = document.querySelector('.pictures');
@@ -19,3 +18,4 @@ imageData.forEach (({url, likes, comments}) => {
 });
 
 renderingThumbnails.append(fragment);
+

@@ -1,12 +1,21 @@
 import {isEscapeKey} from './util.js';
+import {userCommentsForMainArray} from './data.js';
 
-const conteiner = document.querySelector('.pictures');
-const renderingBigImage = document.querySelector('.big-picture');
-const bigPhoto = renderingBigImage.querySelector('.big-picture__img');
-const buttonCloseBigImage = renderingBigImage.querySelector('.big-picture__cancel');
-const commentsCount = document.querySelector('.social__comment-count');
-const newCommentsCount = document.querySelector('.comments-loader');
+//Переменные для показа и скрытия полноэкранного режима
 const bodyPage = document.querySelector('body');
+const renderingBigImage = bodyPage.querySelector('.big-picture');
+const buttonCloseBigImage = renderingBigImage.querySelector('.big-picture__cancel');
+const blockCommentCount = renderingBigImage.querySelector('.social__comment-count');
+const blockCommentsLoad = renderingBigImage.querySelector('.comments-loader');
+
+//Переменные для работы с данными
+const urlData = renderingBigImage.querySelector('.big-picture__img');
+const likeData = renderingBigImage.querySelector('.likes-count');
+const commentData = renderingBigImage.querySelector('.comments-count');
+const descriptionData = renderingBigImage.querySelector('.social__caption');
+const commentListData = renderingBigImage.querySelector('.social__comments');
+const commentListDataTemplate = renderingBigImage.querySelector('.social__comment');
+const bigImageFragment = document.createDocumentFragment();
 
 const onBigImageEscKeydown = (evt) => {
   if (isEscapeKey (evt)) {
@@ -15,30 +24,10 @@ const onBigImageEscKeydown = (evt) => {
   }
 };
 
-/*conteiner.addEventListener('click', () => {
-  renderingBigImage.classList.remove('hidden');
-  commentsCount.classList.add('hidden');
-  newCommentsCount.classList.add('hidden');
-  bodyPage.classList.add('modal-open');
-
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey (evt)) {
-      evt.preventDefault();
-      renderingBigImage.classList.add('hidden');
-      bodyPage.classList.remove('modal-open');
-    }
-  });
-});
-
-buttonCloseBigImage.addEventListener('click', () => {
-  renderingBigImage.classList.add('hidden');
-  bodyPage.classList.remove('modal-open');
-});*/
-
 function showBigImage () {
   renderingBigImage.classList.remove('hidden');
-  commentsCount.classList.add('hidden');
-  newCommentsCount.classList.add('hidden');
+  blockCommentCount.classList.add('hidden');
+  blockCommentsLoad.classList.add('hidden');
   bodyPage.classList.add('modal-open');
 
   document.addEventListener('keydown', onBigImageEscKeydown);
@@ -51,10 +40,28 @@ function closeBigImage () {
   document.removeEventListener('keydown', onBigImageEscKeydown);
 }
 
-conteiner.addEventListener('click', () => {
-  showBigImage();
-});
-
 buttonCloseBigImage.addEventListener('click', () => {
   closeBigImage();
 });
+
+showBigImage();
+
+const showBigImageData = userCommentsForMainArray;
+
+showBigImageData.forEach(({url, likes, comments, description}) => {
+  urlData.querySelector('img').setAttribute('src', url);
+  likeData.textContent = likes;
+  commentData.textContent = comments.length;
+  descriptionData.textContent = description;
+
+  showBigImageData.comments.forEach(({avatar, name, message}) => {
+    const bigImageElement = commentListDataTemplate.cloneNode(true);
+    bigImageElement.querySelector('.social__picture').setAttribute('src', avatar);
+    bigImageElement.querySelector('social__picture').setAttribute('alt', name);
+    bigImageElement.querySelector('.social__text').textContent = message;
+
+    bigImageFragment.appendChild(bigImageElement);
+  });
+});
+
+commentListData.appendChild(bigImageFragment);
