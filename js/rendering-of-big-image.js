@@ -54,10 +54,10 @@ showBigImageData.forEach(({url, likes, comments, description}) => {
   commentData.textContent = comments.length;
   descriptionData.textContent = description;
 
-  showBigImageData.comments.forEach(({avatar, name, message}) => {
+  comments.forEach(({avatar, name, message}) => {
     const bigImageElement = commentListDataTemplate.cloneNode(true);
     bigImageElement.querySelector('.social__picture').setAttribute('src', avatar);
-    bigImageElement.querySelector('social__picture').setAttribute('alt', name);
+    bigImageElement.querySelector('.social__picture').setAttribute('alt', name);
     bigImageElement.querySelector('.social__text').textContent = message;
 
     bigImageFragment.appendChild(bigImageElement);
