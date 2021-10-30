@@ -13,4 +13,6 @@ const getRandomNotRepeat = (amount) => {
 };
 getRandomNotRepeat();
 
-export {getRandomIntInclusive, getRandomNotRepeat};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomIntInclusive, getRandomNotRepeat, isEscapeKey};

@@ -16,4 +16,6 @@ imageData.forEach (({url, likes, comments}) => {
   image.querySelector('.picture__comments').textContent = comments.length;
   fragment.appendChild(image);
 });
+
 renderingThumbnails.append(fragment);
+
