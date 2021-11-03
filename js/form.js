@@ -6,9 +6,9 @@ const userImageForm = document.querySelector('.img-upload__overlay');
 const body = document.querySelector('body');
 const userImageLoad = document.querySelector('#upload-file');
 const buttonCloseImageForm = userImageForm.querySelector('#upload-cancel');
-const hashtagInput = userImageForm.querySelector('.text__hashtags');
+//const hashtagInput = userImageForm.querySelector('.text__hashtags');
 const textDescriptionInput = userImageForm.querySelector('.text__description');
-const hashtagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+//const hashtagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const userImage = userImageForm.querySelector('.img-upload__user');
 
 const checkTextDescription = () => {
