@@ -1,5 +1,8 @@
 import {getRandomIntInclusive, getRandomNotRepeat} from './util.js';
 
+const AMOUNT_OF_GENERATE_USER_COMMENTS = 3;
+const AMOUNT_OF_GENERATE_USER_IMAGE = 25;
+
 const userNames = [
   'Павел',
   'Михаил',
@@ -21,32 +24,29 @@ const userListComments = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-const AMOUNT_OF_GENERATE_USER_COMMENTS = 3;
-const AMOUNT_OF_GENERATE_OBJECTS = 25;
+const createRandomElement = (element) => element[getRandomIntInclusive(0, element.length - 1)];
 
-const getRandomArrayElement = (elements) => elements[getRandomIntInclusive(0, elements.length - 1)];
+const itemId = getRandomNotRepeat(AMOUNT_OF_GENERATE_USER_IMAGE);
+const itemUrl = getRandomNotRepeat(AMOUNT_OF_GENERATE_USER_IMAGE);
+const itemDescription = getRandomNotRepeat(AMOUNT_OF_GENERATE_USER_IMAGE);
 
-const getItemForId = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
-const getItemForUrl = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
-const getItemForDescription = getRandomNotRepeat(AMOUNT_OF_GENERATE_OBJECTS);
-
-const createObjectForComments = () => ({
+const createUserComment = () => ({
   id: getRandomIntInclusive(1, 1000),
   avatar: `img/avatar-${  getRandomIntInclusive(1, 6)  }.svg`,
-  message: getRandomArrayElement(userListComments),
-  name: getRandomArrayElement(userNames),
+  message: createRandomElement(userListComments),
+  name: createRandomElement(userNames),
 });
 
-const userComments = Array.from({length: AMOUNT_OF_GENERATE_USER_COMMENTS}, createObjectForComments);
+const userComments = Array.from({length: AMOUNT_OF_GENERATE_USER_COMMENTS}, createUserComment);
 
-const getObjectForArray = () => ({
-  id: getItemForId(),
-  url: `photos/${  getItemForUrl() }.jpg`,
-  description: `Cool photo №${ getItemForDescription() }!!!`,
+const createUserImage = () => ({
+  id: itemId(),
+  url: `photos/${  itemUrl() }.jpg`,
+  description: `Cool photo №${ itemDescription() }!!!`,
   likes: getRandomIntInclusive (15, 200),
   comments: userComments,
 });
 
-const userCommentsForMainArray = Array.from({length: AMOUNT_OF_GENERATE_OBJECTS}, getObjectForArray);
+const userImages = Array.from({length: AMOUNT_OF_GENERATE_USER_IMAGE}, createUserImage);
 
-export {userCommentsForMainArray, userComments};
+export {userImages, userComments};

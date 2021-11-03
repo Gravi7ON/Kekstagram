@@ -13,6 +13,10 @@ const getRandomNotRepeat = (amount) => {
 };
 getRandomNotRepeat();
 
+const checkStringLength = function (string, length) {
+  return string.length <= length;
+};
+
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomIntInclusive, getRandomNotRepeat, isEscapeKey};
+export {getRandomIntInclusive, getRandomNotRepeat, isEscapeKey, checkStringLength};
