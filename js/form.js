@@ -51,7 +51,7 @@ const checkTextDescription = () => {
 };
 
 const onformEditEscKeydown = (evt) => {
-  if (isEscapeKey (evt)) {
+  if (isEscapeKey (evt) && !evt.target.closest('.img-upload__text')) {
     evt.preventDefault();
     closeFormEditImage();
   }
@@ -76,7 +76,8 @@ function closeFormEditImage () {
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onformEditEscKeydown);
   buttonCloseImageForm.removeEventListener('click', onButtonCloseClick);
-  hashTagInput.addEventListener('input', checkHashTag);
+  textDescriptionInput.removeEventListener('input', checkTextDescription);
+  hashTagInput.removeEventListener('input', checkHashTag);
   userImageLoad.value = '';
 }
 
@@ -84,4 +85,3 @@ userImageLoad.addEventListener('change', () => {
   showFormEditImage();
   userImage.src = URL.createObjectURL(userImageLoad.files[0]);
 });
-
