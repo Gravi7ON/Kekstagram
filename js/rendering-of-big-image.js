@@ -17,6 +17,8 @@ const commentListData = imageBig.querySelector('.social__comments');
 const commentListDataTemplate = imageBig.querySelector('.social__comment');
 const imageFragment = document.createDocumentFragment();
 
+commentListData.innerHTML = '';
+
 const onBigImageEscKeydown = (evt) => {
   if (isEscapeKey (evt)) {
     evt.preventDefault();
@@ -30,8 +32,6 @@ const onButtonCloseClick = () => {
 
 function showBigImage () {
   imageBig.classList.remove('hidden');
-  blockCommentCount.classList.add('hidden');
-  blockCommentsLoad.classList.add('hidden');
   bodyPage.classList.add('modal-open');
 
   document.addEventListener('keydown', onBigImageEscKeydown);
