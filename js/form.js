@@ -4,6 +4,10 @@ const LIMIT_HASHTAG_LENGTH = 20;
 const LIMIT_HASHTAGS_LENGTH = 5;
 const LIMIT_COMMENT_LENGTH = 140;
 
+const MIN_IMAGE_SCALE = 25;
+const MAX_IMAGE_SCALE = 100;
+const STEP_IMAGE_SCALE = 25;
+
 const body = document.querySelector('body');
 const userImageForm = document.querySelector('.img-upload__overlay');
 const userImageLoad = document.querySelector('#upload-file');
@@ -84,4 +88,42 @@ function closeFormEditImage () {
 userImageLoad.addEventListener('change', () => {
   showFormEditImage();
   userImage.src = URL.createObjectURL(userImageLoad.files[0]);
+});
+
+const buttonSmaller = document.querySelector('.scale__control--smaller');
+const buttonBigger = document.querySelector('.scale__control--bigger');
+const scaleValue = document.querySelector('.scale__control--value');
+const imagePreview = document.querySelector('.img-upload__preview');
+let imageScale = 100;
+
+function changeScaleImage () {
+  imagePreview.style.transform = `scale(${imageScale/100})`;
+}
+
+function changeNumberValue () {
+  scaleValue.value = `${imageScale}%`;
+}
+
+buttonSmaller.addEventListener('click', () => {
+  if (imageScale === MIN_IMAGE_SCALE) {
+    buttonSmaller.disabled = true;
+  } else if (imageScale > MIN_IMAGE_SCALE) {
+    imageScale -= STEP_IMAGE_SCALE;
+    changeScaleImage();
+    changeNumberValue();
+  }
+  buttonSmaller.disabled = false;
+  document.querySelector('.scale__value').textContent = imageScale;
+});
+
+buttonBigger.addEventListener('click', () => {
+  if (imageScale === MAX_IMAGE_SCALE) {
+    buttonBigger.disabled = true;
+  } else if (imageScale < MAX_IMAGE_SCALE) {
+    imageScale += STEP_IMAGE_SCALE;
+    changeScaleImage();
+    changeNumberValue();
+  }
+  buttonBigger.disabled = false;
+  document.querySelector('.scale__value').textContent = imageScale;
 });
