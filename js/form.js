@@ -16,6 +16,7 @@ const textDescriptionInput = userImageForm.querySelector('.text__description');
 const userImage = userImageForm.querySelector('.img-upload__user');
 const hashTagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const hashTagInput = userImageForm.querySelector('.text__hashtags');
+const imgEffects = document.querySelector('.img-upload__effects');
 
 const checkHashTag = () => {
   const valueHashTag = hashTagInput.value.trim().toLowerCase();
@@ -65,31 +66,6 @@ const onButtonCloseClick = () => {
   closeFormEditImage();
 };
 
-function showFormEditImage () {
-  userImageForm.classList.remove('hidden');
-  body.classList.add('modal-open');
-
-  document.addEventListener('keydown', onformEditEscKeydown);
-  buttonCloseImageForm.addEventListener('click', onButtonCloseClick);
-  textDescriptionInput.addEventListener('input', checkTextDescription);
-  hashTagInput.addEventListener('input', checkHashTag);
-}
-
-function closeFormEditImage () {
-  userImageForm.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onformEditEscKeydown);
-  buttonCloseImageForm.removeEventListener('click', onButtonCloseClick);
-  textDescriptionInput.removeEventListener('input', checkTextDescription);
-  hashTagInput.removeEventListener('input', checkHashTag);
-  userImageLoad.value = '';
-}
-
-userImageLoad.addEventListener('change', () => {
-  showFormEditImage();
-  userImage.src = URL.createObjectURL(userImageLoad.files[0]);
-});
-
 const buttonSmaller = document.querySelector('.scale__control--smaller');
 const buttonBigger = document.querySelector('.scale__control--bigger');
 const scaleValue = document.querySelector('.scale__control--value');
@@ -104,7 +80,7 @@ function changeNumberValue () {
   scaleValue.value = `${imageScale}%`;
 }
 
-buttonSmaller.addEventListener('click', () => {
+const onButtonSmallerClick = () => {
   if (imageScale === MIN_IMAGE_SCALE) {
     buttonSmaller.disabled = true;
   } else if (imageScale > MIN_IMAGE_SCALE) {
@@ -114,9 +90,9 @@ buttonSmaller.addEventListener('click', () => {
   }
   buttonSmaller.disabled = false;
   document.querySelector('.scale__value').textContent = imageScale;
-});
+};
 
-buttonBigger.addEventListener('click', () => {
+const onButtonBiggerClick = () => {
   if (imageScale === MAX_IMAGE_SCALE) {
     buttonBigger.disabled = true;
   } else if (imageScale < MAX_IMAGE_SCALE) {
@@ -126,4 +102,149 @@ buttonBigger.addEventListener('click', () => {
   }
   buttonBigger.disabled = false;
   document.querySelector('.scale__value').textContent = imageScale;
+};
+
+const image = document.querySelector('.img-upload__preview img');
+const slider = document.querySelector('.effect-level__slider');
+const effectLevelValue = document.querySelector('.effect-level__value');
+
+noUiSlider.create(slider, {
+  range: {
+    min: 0,
+    max: 1,
+  },
+  start: 1,
+  step: 0.1,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(1);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+slider.style.display = 'none';
+
+
+const checkSlider = (effect, symbol = '') => {
+  slider.noUiSlider.on('update', (values, handle) => {
+    effectLevelValue.value = values[handle];
+    image.style.filter = `${effect}(${values[handle]}${symbol})`;
+  });
+};
+
+const onImgEffects = (evt) => {
+
+  if(evt.target.closest('.effects__preview--none')) {
+    image.className = '';
+    image.style.filter = '';
+    slider.style.display = 'none';
+    slider.noUiSlider.off();
+  } else if(evt.target.closest('.effects__preview--chrome')) {
+    image.className = 'effects__preview--chrome';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 1,
+      },
+      start: 1,
+      step: 0.1,
+    });
+    checkSlider('grayscale');
+  } else if(evt.target.closest('.effects__preview--sepia')) {
+    image.className = 'effects__preview--sepia';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 1,
+      },
+      start: 1,
+      step: 0.1,
+    });
+    checkSlider('sepia');
+  } else if(evt.target.closest('.effects__preview--marvin')) {
+    image.className = 'effects__preview--marvin';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 100,
+      },
+      start: 100,
+      step: 1,
+    });
+    checkSlider('invert', '%');
+  } else if(evt.target.closest('.effects__preview--phobos')) {
+    image.className = 'effects__preview--phobos';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 3,
+      },
+      start: 3,
+      step: 0.1,
+    });
+    checkSlider('blur', 'px');
+  } else if(evt.target.closest('.effects__preview--heat')) {
+    image.className = 'effects__preview--heat';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 1,
+        max: 3,
+      },
+      start: 3,
+      step: 0.1,
+    });
+    checkSlider('brightness');
+  }
+};
+
+function showFormEditImage () {
+  userImageForm.classList.remove('hidden');
+  body.classList.add('modal-open');
+
+  document.addEventListener('keydown', onformEditEscKeydown);
+  buttonCloseImageForm.addEventListener('click', onButtonCloseClick);
+  textDescriptionInput.addEventListener('input', checkTextDescription);
+  hashTagInput.addEventListener('input', checkHashTag);
+  buttonSmaller.addEventListener('click', onButtonSmallerClick);
+  buttonBigger.addEventListener('click', onButtonBiggerClick);
+  imgEffects.addEventListener('click', onImgEffects);
+}
+
+function closeFormEditImage () {
+  userImageForm.classList.add('hidden');
+  body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onformEditEscKeydown);
+  buttonCloseImageForm.removeEventListener('click', onButtonCloseClick);
+  textDescriptionInput.removeEventListener('input', checkTextDescription);
+  hashTagInput.removeEventListener('input', checkHashTag);
+  buttonSmaller.removeEventListener('click', onButtonSmallerClick);
+  buttonBigger.removeEventListener('click', onButtonBiggerClick);
+  imgEffects.removeEventListener('click', onImgEffects);
+  userImageLoad.value = '';
+}
+
+userImageLoad.addEventListener('change', () => {
+  showFormEditImage();
+  userImage.src = URL.createObjectURL(userImageLoad.files[0]);
 });
