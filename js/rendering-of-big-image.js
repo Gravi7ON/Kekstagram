@@ -5,8 +5,8 @@ import {userImages} from './data.js';
 const bodyPage = document.querySelector('body');
 const imageBig = bodyPage.querySelector('.big-picture');
 const buttonCloseBigImage = imageBig.querySelector('.big-picture__cancel');
-const blockCommentCount = imageBig.querySelector('.social__comment-count');
-const blockCommentsLoad = imageBig.querySelector('.comments-loader');
+//const blockCommentCount = imageBig.querySelector('.social__comment-count');
+//const blockCommentsLoad = imageBig.querySelector('.comments-loader');
 
 //Переменные для работы с данными
 const urlData = imageBig.querySelector('.big-picture__img');
