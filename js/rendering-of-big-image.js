@@ -1,5 +1,4 @@
 import {isEscapeKey} from './util.js';
-import {userImages} from './data.js';
 
 //Переменные для показа и скрытия полноэкранного режима
 const bodyPage = document.querySelector('body');
@@ -16,8 +15,6 @@ const descriptionData = imageBig.querySelector('.social__caption');
 const commentListData = imageBig.querySelector('.social__comments');
 const commentListDataTemplate = imageBig.querySelector('.social__comment');
 const imageFragment = document.createDocumentFragment();
-
-commentListData.innerHTML = '';
 
 const onBigImageEscKeydown = (evt) => {
   if (isEscapeKey (evt)) {
@@ -36,6 +33,8 @@ function showBigImage () {
 
   document.addEventListener('keydown', onBigImageEscKeydown);
   buttonCloseBigImage.addEventListener('click', onButtonCloseClick);
+
+  commentListData.innerHTML = '';
 }
 
 function closeBigImage () {
@@ -46,9 +45,7 @@ function closeBigImage () {
   buttonCloseBigImage.removeEventListener('click', onButtonCloseClick);
 }
 
-showBigImage();
-
-userImages.forEach(({url, likes, comments, description}) => {
+const showPostPreview = (({url, likes, comments, description}) => {
   urlData.querySelector('img').setAttribute('src', url);
   likeData.textContent = likes;
   commentData.textContent = comments.length;
@@ -62,6 +59,7 @@ userImages.forEach(({url, likes, comments, description}) => {
 
     imageFragment.appendChild(imageElement);
   });
+  commentListData.appendChild(imageFragment);
 });
 
-commentListData.appendChild(imageFragment);
+export {showBigImage, showPostPreview};

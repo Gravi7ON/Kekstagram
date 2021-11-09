@@ -11,6 +11,7 @@ const STEP_IMAGE_SCALE = 25;
 const body = document.querySelector('body');
 const userImageForm = document.querySelector('.img-upload__overlay');
 const userImageLoad = document.querySelector('#upload-file');
+const imageForm = document.querySelector('.img-upload__form');
 const buttonCloseImageForm = userImageForm.querySelector('#upload-cancel');
 const textDescriptionInput = userImageForm.querySelector('.text__description');
 const userImage = userImageForm.querySelector('.img-upload__user');
@@ -70,6 +71,7 @@ const buttonSmaller = document.querySelector('.scale__control--smaller');
 const buttonBigger = document.querySelector('.scale__control--bigger');
 const scaleValue = document.querySelector('.scale__control--value');
 const imagePreview = document.querySelector('.img-upload__preview');
+const userImageScaleHidden = document.querySelector('.scale__value');
 let imageScale = 100;
 
 function changeScaleImage () {
@@ -89,7 +91,7 @@ const onButtonSmallerClick = () => {
     changeNumberValue();
   }
   buttonSmaller.disabled = false;
-  document.querySelector('.scale__value').textContent = imageScale;
+  userImageScaleHidden.textContent = imageScale;
 };
 
 const onButtonBiggerClick = () => {
@@ -101,13 +103,14 @@ const onButtonBiggerClick = () => {
     changeNumberValue();
   }
   buttonBigger.disabled = false;
-  document.querySelector('.scale__value').textContent = imageScale;
+  userImageScaleHidden.textContent = imageScale;
 };
 
 const image = document.querySelector('.img-upload__preview img');
 const slider = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const imageEffectsPreview = document.querySelectorAll('.effects__preview');
+const userImageFilteHidden = document.querySelector('.effect__value');
 
 noUiSlider.create(slider, {
   range: {
@@ -119,6 +122,7 @@ noUiSlider.create(slider, {
   connect: 'lower',
   format: {
     to: function (value) {
+      userImageFilteHidden.textContent = value;
       if (Number.isInteger(value)) {
         return value.toFixed(0);
       }
@@ -219,6 +223,20 @@ const onImgEffectsClick = (evt) => {
   }
 };
 
+const resetUserImageForm = () => {
+  userImageLoad.value = '';
+  imageForm.reset();
+  userImage.style.filter = '';
+  slider.style.display = 'none';
+  userImage.style.transform = 'scale(1.0)';
+  scaleValue.value = '100%';
+  userImage.className = '';
+  imagePreview.style.transform = 'scale(1.0)';
+  document.querySelector('.scale__value').textContent = '';
+  userImageFilteHidden.textContent = '';
+  userImageScaleHidden.textContent = '';
+};
+
 function showFormEditImage () {
   userImageForm.classList.remove('hidden');
   body.classList.add('modal-open');
@@ -242,13 +260,7 @@ function closeFormEditImage () {
   buttonSmaller.removeEventListener('click', onButtonSmallerClick);
   buttonBigger.removeEventListener('click', onButtonBiggerClick);
   imageEffect.removeEventListener('click', onImgEffectsClick);
-  userImageLoad.value = '';
-  userImage.style.filter = '';
-  slider.style.display = 'none';
-  userImage.style.transform = 'scale(1.0)';
-  scaleValue.value = '100%';
-  userImage.className = '';
-  imagePreview.style.transform = 'scale(1.0)';
+  resetUserImageForm();
 }
 
 userImageLoad.addEventListener('change', () => {
