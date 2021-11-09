@@ -16,7 +16,7 @@ const textDescriptionInput = userImageForm.querySelector('.text__description');
 const userImage = userImageForm.querySelector('.img-upload__user');
 const hashTagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const hashTagInput = userImageForm.querySelector('.text__hashtags');
-const imgEffects = document.querySelector('.img-upload__effects');
+const imageEffect = document.querySelector('.img-upload__effects');
 
 const checkHashTag = () => {
   const valueHashTag = hashTagInput.value.trim().toLowerCase();
@@ -107,6 +107,7 @@ const onButtonBiggerClick = () => {
 const image = document.querySelector('.img-upload__preview img');
 const slider = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
+const imageEffectsPreview = document.querySelectorAll('.effects__preview');
 
 noUiSlider.create(slider, {
   range: {
@@ -138,7 +139,7 @@ const checkSlider = (effect, symbol = '') => {
   });
 };
 
-const onImgEffects = (evt) => {
+const onImgEffectsClick = (evt) => {
 
   if(evt.target.closest('.effects__preview--none')) {
     image.className = '';
@@ -228,7 +229,7 @@ function showFormEditImage () {
   hashTagInput.addEventListener('input', checkHashTag);
   buttonSmaller.addEventListener('click', onButtonSmallerClick);
   buttonBigger.addEventListener('click', onButtonBiggerClick);
-  imgEffects.addEventListener('click', onImgEffects);
+  imageEffect.addEventListener('click', onImgEffectsClick);
 }
 
 function closeFormEditImage () {
@@ -240,11 +241,21 @@ function closeFormEditImage () {
   hashTagInput.removeEventListener('input', checkHashTag);
   buttonSmaller.removeEventListener('click', onButtonSmallerClick);
   buttonBigger.removeEventListener('click', onButtonBiggerClick);
-  imgEffects.removeEventListener('click', onImgEffects);
+  imageEffect.removeEventListener('click', onImgEffectsClick);
   userImageLoad.value = '';
+  userImage.style.filter = '';
+  slider.style.display = 'none';
+  userImage.style.transform = 'scale(1.0)';
+  scaleValue.value = '100%';
+  userImage.className = '';
+  imagePreview.style.transform = 'scale(1.0)';
 }
 
 userImageLoad.addEventListener('change', () => {
   showFormEditImage();
-  userImage.src = URL.createObjectURL(userImageLoad.files[0]);
+  const imageUser = URL.createObjectURL(userImageLoad.files[0]);
+  userImage.src = imageUser;
+  imageEffectsPreview.forEach((item) => {
+    item.style.backgroundImage = `url(${imageUser})`;
+  });
 });
