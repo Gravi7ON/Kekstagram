@@ -1,17 +1,5 @@
-const getRandomIntInclusive = (from, to) => {
-  if (from < to && to !== 0 && from >= 0) {
-    return Math.floor(Math.random() * (to - from + 1)) + from;
-  }
-  return 'Аргументы не должны быть отрицательными, а также from не может быть больше или равно to';
-};
-getRandomIntInclusive();
-
-const getRandomNotRepeat = (amount) => {
-  const items = [...Array(amount)].map((it, index) => index + 1);
-  items.sort(() => Math.random() - 0.5);
-  return () => items.pop();
-};
-getRandomNotRepeat();
+const body = document.querySelector('body');
+const imgUploadMessage = document.querySelector('#messages');
 
 const checkStringLength = function (string, length) {
   return string.length <= length;
@@ -19,4 +7,31 @@ const checkStringLength = function (string, length) {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomIntInclusive, getRandomNotRepeat, isEscapeKey, checkStringLength};
+const showLoadBlock = () => {
+  const templateItem = imgUploadMessage.content.cloneNode(true);
+  body.append(templateItem);
+};
+
+const showErrorLoad = (message) => {
+  const errorBlock = document.createElement('div');
+  errorBlock.style.zIndex = 100;
+  errorBlock.style.position = 'absolute';
+  errorBlock.style.left = 0;
+  errorBlock.style.top = 0;
+  errorBlock.style.right = 0;
+  errorBlock.style.padding = '20px 3px';
+  errorBlock.style.fontSize = '17px';
+  errorBlock.style.fontFamily = 'Verdana, sans-serif';
+  errorBlock.style.textAlign = 'center';
+  errorBlock.style.backgroundColor = '#000000';
+
+  errorBlock.textContent = message;
+
+  document.body.append(errorBlock);
+
+  setTimeout(() => {
+    errorBlock.remove();
+  }, 4000);
+};
+
+export {isEscapeKey, checkStringLength, showLoadBlock, showErrorLoad};
