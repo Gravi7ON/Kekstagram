@@ -4,14 +4,20 @@ const LIMIT_HASHTAG_LENGTH = 20;
 const LIMIT_HASHTAGS_LENGTH = 5;
 const LIMIT_COMMENT_LENGTH = 140;
 
+const MIN_IMAGE_SCALE = 25;
+const MAX_IMAGE_SCALE = 100;
+const STEP_IMAGE_SCALE = 25;
+
 const body = document.querySelector('body');
 const userImageForm = document.querySelector('.img-upload__overlay');
 const userImageLoad = document.querySelector('#upload-file');
+const imageForm = document.querySelector('.img-upload__form');
 const buttonCloseImageForm = userImageForm.querySelector('#upload-cancel');
 const textDescriptionInput = userImageForm.querySelector('.text__description');
 const userImage = userImageForm.querySelector('.img-upload__user');
 const hashTagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const hashTagInput = userImageForm.querySelector('.text__hashtags');
+const imageEffect = document.querySelector('.img-upload__effects');
 
 const checkHashTag = () => {
   const valueHashTag = hashTagInput.value.trim().toLowerCase();
@@ -61,6 +67,176 @@ const onButtonCloseClick = () => {
   closeFormEditImage();
 };
 
+const buttonSmaller = document.querySelector('.scale__control--smaller');
+const buttonBigger = document.querySelector('.scale__control--bigger');
+const scaleValue = document.querySelector('.scale__control--value');
+const imagePreview = document.querySelector('.img-upload__preview');
+const userImageScaleHidden = document.querySelector('.scale__value');
+let imageScale = 100;
+
+function changeScaleImage () {
+  imagePreview.style.transform = `scale(${imageScale/100})`;
+}
+
+function changeNumberValue () {
+  scaleValue.value = `${imageScale}%`;
+}
+
+const onButtonSmallerClick = () => {
+  if (imageScale === MIN_IMAGE_SCALE) {
+    buttonSmaller.disabled = true;
+  } else if (imageScale > MIN_IMAGE_SCALE) {
+    imageScale -= STEP_IMAGE_SCALE;
+    changeScaleImage();
+    changeNumberValue();
+  }
+  buttonSmaller.disabled = false;
+  userImageScaleHidden.textContent = imageScale;
+};
+
+const onButtonBiggerClick = () => {
+  if (imageScale === MAX_IMAGE_SCALE) {
+    buttonBigger.disabled = true;
+  } else if (imageScale < MAX_IMAGE_SCALE) {
+    imageScale += STEP_IMAGE_SCALE;
+    changeScaleImage();
+    changeNumberValue();
+  }
+  buttonBigger.disabled = false;
+  userImageScaleHidden.textContent = imageScale;
+};
+
+const image = document.querySelector('.img-upload__preview img');
+const slider = document.querySelector('.effect-level__slider');
+const effectLevelValue = document.querySelector('.effect-level__value');
+const imageEffectsPreview = document.querySelectorAll('.effects__preview');
+const userImageFilteHidden = document.querySelector('.effect__value');
+
+noUiSlider.create(slider, {
+  range: {
+    min: 0,
+    max: 1,
+  },
+  start: 1,
+  step: 0.1,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      userImageFilteHidden.textContent = value;
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(1);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+slider.style.display = 'none';
+
+
+const checkSlider = (effect, symbol = '') => {
+  slider.noUiSlider.on('update', (values, handle) => {
+    effectLevelValue.value = values[handle];
+    image.style.filter = `${effect}(${values[handle]}${symbol})`;
+  });
+};
+
+const onImgEffectsClick = (evt) => {
+
+  if(evt.target.closest('.effects__preview--none')) {
+    image.className = '';
+    image.style.filter = '';
+    slider.style.display = 'none';
+    slider.noUiSlider.off();
+  } else if(evt.target.closest('.effects__preview--chrome')) {
+    image.className = 'effects__preview--chrome';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 1,
+      },
+      start: 1,
+      step: 0.1,
+    });
+    checkSlider('grayscale');
+  } else if(evt.target.closest('.effects__preview--sepia')) {
+    image.className = 'effects__preview--sepia';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 1,
+      },
+      start: 1,
+      step: 0.1,
+    });
+    checkSlider('sepia');
+  } else if(evt.target.closest('.effects__preview--marvin')) {
+    image.className = 'effects__preview--marvin';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 100,
+      },
+      start: 100,
+      step: 1,
+    });
+    checkSlider('invert', '%');
+  } else if(evt.target.closest('.effects__preview--phobos')) {
+    image.className = 'effects__preview--phobos';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 3,
+      },
+      start: 3,
+      step: 0.1,
+    });
+    checkSlider('blur', 'px');
+  } else if(evt.target.closest('.effects__preview--heat')) {
+    image.className = 'effects__preview--heat';
+    slider.style.display = 'block';
+    slider.noUiSlider.off();
+
+    slider.noUiSlider.updateOptions({
+      range: {
+        min: 1,
+        max: 3,
+      },
+      start: 3,
+      step: 0.1,
+    });
+    checkSlider('brightness');
+  }
+};
+
+const resetUserImageForm = () => {
+  userImageLoad.value = '';
+  imageForm.reset();
+  userImage.style.filter = '';
+  slider.style.display = 'none';
+  userImage.style.transform = 'scale(1.0)';
+  scaleValue.value = '100%';
+  userImage.className = '';
+  imagePreview.style.transform = 'scale(1.0)';
+  document.querySelector('.scale__value').textContent = '';
+  userImageFilteHidden.textContent = '';
+  userImageScaleHidden.textContent = '';
+};
+
 function showFormEditImage () {
   userImageForm.classList.remove('hidden');
   body.classList.add('modal-open');
@@ -69,6 +245,9 @@ function showFormEditImage () {
   buttonCloseImageForm.addEventListener('click', onButtonCloseClick);
   textDescriptionInput.addEventListener('input', checkTextDescription);
   hashTagInput.addEventListener('input', checkHashTag);
+  buttonSmaller.addEventListener('click', onButtonSmallerClick);
+  buttonBigger.addEventListener('click', onButtonBiggerClick);
+  imageEffect.addEventListener('click', onImgEffectsClick);
 }
 
 function closeFormEditImage () {
@@ -78,10 +257,17 @@ function closeFormEditImage () {
   buttonCloseImageForm.removeEventListener('click', onButtonCloseClick);
   textDescriptionInput.removeEventListener('input', checkTextDescription);
   hashTagInput.removeEventListener('input', checkHashTag);
-  userImageLoad.value = '';
+  buttonSmaller.removeEventListener('click', onButtonSmallerClick);
+  buttonBigger.removeEventListener('click', onButtonBiggerClick);
+  imageEffect.removeEventListener('click', onImgEffectsClick);
+  resetUserImageForm();
 }
 
 userImageLoad.addEventListener('change', () => {
   showFormEditImage();
-  userImage.src = URL.createObjectURL(userImageLoad.files[0]);
+  const imageUser = URL.createObjectURL(userImageLoad.files[0]);
+  userImage.src = imageUser;
+  imageEffectsPreview.forEach((item) => {
+    item.style.backgroundImage = `url(${imageUser})`;
+  });
 });

@@ -1,12 +1,11 @@
 import {isEscapeKey} from './util.js';
-import {userImages} from './data.js';
 
 //Переменные для показа и скрытия полноэкранного режима
 const bodyPage = document.querySelector('body');
 const imageBig = bodyPage.querySelector('.big-picture');
 const buttonCloseBigImage = imageBig.querySelector('.big-picture__cancel');
-const blockCommentCount = imageBig.querySelector('.social__comment-count');
-const blockCommentsLoad = imageBig.querySelector('.comments-loader');
+//const blockCommentCount = imageBig.querySelector('.social__comment-count');
+//const blockCommentsLoad = imageBig.querySelector('.comments-loader');
 
 //Переменные для работы с данными
 const urlData = imageBig.querySelector('.big-picture__img');
@@ -30,12 +29,12 @@ const onButtonCloseClick = () => {
 
 function showBigImage () {
   imageBig.classList.remove('hidden');
-  blockCommentCount.classList.add('hidden');
-  blockCommentsLoad.classList.add('hidden');
   bodyPage.classList.add('modal-open');
 
   document.addEventListener('keydown', onBigImageEscKeydown);
   buttonCloseBigImage.addEventListener('click', onButtonCloseClick);
+
+  commentListData.innerHTML = '';
 }
 
 function closeBigImage () {
@@ -46,9 +45,7 @@ function closeBigImage () {
   buttonCloseBigImage.removeEventListener('click', onButtonCloseClick);
 }
 
-showBigImage();
-
-userImages.forEach(({url, likes, comments, description}) => {
+const showPostPreview = (({url, likes, comments, description}) => {
   urlData.querySelector('img').setAttribute('src', url);
   likeData.textContent = likes;
   commentData.textContent = comments.length;
@@ -62,6 +59,7 @@ userImages.forEach(({url, likes, comments, description}) => {
 
     imageFragment.appendChild(imageElement);
   });
+  commentListData.appendChild(imageFragment);
 });
 
-commentListData.appendChild(imageFragment);
+export {showBigImage, showPostPreview};

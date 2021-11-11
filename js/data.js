@@ -1,6 +1,6 @@
 import {getRandomIntInclusive, getRandomNotRepeat} from './util.js';
 
-const AMOUNT_OF_GENERATE_USER_COMMENTS = 3;
+const AMOUNT_OF_GENERATE_USER_COMMENTS = 7;
 const AMOUNT_OF_GENERATE_USER_IMAGE = 25;
 
 const userNames = [
@@ -39,14 +39,23 @@ const createUserComment = () => ({
 
 const userComments = Array.from({length: AMOUNT_OF_GENERATE_USER_COMMENTS}, createUserComment);
 
+const getUniqUserComment = () => {
+  const userLists = Array.from({length: getRandomIntInclusive(1, AMOUNT_OF_GENERATE_USER_COMMENTS)});
+  const uniqUserComments = userLists.map((element) => {
+    element = userComments[getRandomIntInclusive(0, userComments.length - 1)];
+    return element;
+  });
+  return uniqUserComments;
+};
+
 const createUserImage = () => ({
   id: itemId(),
   url: `photos/${  itemUrl() }.jpg`,
   description: `Cool photo №${ itemDescription() }!!!`,
   likes: getRandomIntInclusive (15, 200),
-  comments: userComments,
+  comments: getUniqUserComment(),
 });
 
 const userImages = Array.from({length: AMOUNT_OF_GENERATE_USER_IMAGE}, createUserImage);
 
-export {userImages, userComments};
+export {userImages};

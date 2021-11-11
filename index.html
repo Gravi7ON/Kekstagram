@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="nouislider/nouislider.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кекстаграм</title>
 </head>
@@ -46,12 +47,12 @@
                   <!-- Изменение размера изображения -->
                   <fieldset class="img-upload__scale  scale">
                     <button type="button" class="scale__control  scale__control--smaller">Уменьшить</button>
-                    <input type="text" class="scale__control  scale__control--value" value="55%" title="Image Scale" name="scale" readonly>
+                    <input type="text" class="scale__control  scale__control--value" value="100%" title="Image Scale" name="scale" readonly>
                     <button type="button" class="scale__control  scale__control--bigger">Увеличить</button>
                   </fieldset>
 
                   <!-- Предварительный просмотр изображения -->
-                  <div class="img-upload__preview">
+                  <div class="img-upload__preview" style="filter: none; transform: scale(1)">
                     <img class="img-upload__user" src="img/upload-default-image.jpg" alt="Предварительный просмотр фотографии">
                   </div>
 
@@ -229,6 +230,14 @@
   <template id="messages">
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
-<script src="/js/main.js" type="module"></script>
+
+  <!-- Скрытые поля для значений формы изображения -->
+   <div class="hidden-data hidden">
+    <span class="effect__value"></span>
+    <span class="scale__value"></span>
+  </div>
+
+  <script src="/nouislider/nouislider.js"></script>
+  <script src="/js/main.js" type="module"></script>
 </body>
 </html>
