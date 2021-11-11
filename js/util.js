@@ -1,5 +1,7 @@
 const body = document.querySelector('body');
 const imgUploadMessage = document.querySelector('#messages');
+const imgSuccessMessage = document.querySelector('#success');
+const imgErrorMessage = document.querySelector('#error');
 
 const checkStringLength = function (string, length) {
   return string.length <= length;
@@ -9,6 +11,47 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const showLoadBlock = () => {
   const templateItem = imgUploadMessage.content.cloneNode(true);
+  body.append(templateItem);
+};
+
+const hideLoadBlock = () => {
+  const blockLoad = body.querySelector('.img-upload__message');
+  if (!blockLoad) {
+    return;
+  }
+  blockLoad.remove();
+};
+
+const hideSuccessBlock = () => {
+  const successBlock = body.querySelector('.success');
+  if (!successBlock) {
+    return;
+  }
+  successBlock.remove();
+};
+
+const hideErrorBlock = () => {
+  const errorBlock = body.querySelector('.error');
+  if (!errorBlock) {
+    return;
+  }
+  errorBlock.remove();
+};
+
+const showSuccessBlock = () => {
+  const templateItem = imgSuccessMessage.content.cloneNode(true);
+
+  document.body.addEventListener('click', (evt) => {
+    const successBlock = document.querySelector('.success__inner');
+    const element = evt.target;
+    if (successBlock.contains(element)) {
+      if (element.classList.contains('.success__button')) {
+        hideSuccessBlock();
+      }
+    } else {
+      hideSuccessBlock();
+    }
+  });
   body.append(templateItem);
 };
 
@@ -34,4 +77,21 @@ const showErrorLoad = (message) => {
   }, 4000);
 };
 
-export {isEscapeKey, checkStringLength, showLoadBlock, showErrorLoad};
+const showErrorBlock = () => {
+  const templateItem = imgErrorMessage.content.cloneNode(true);
+
+  document.body.addEventListener('click', (evt) => {
+    const successBlock = document.querySelector('.error__inner');
+    const element = evt.target;
+    if (successBlock.contains(element)) {
+      if (element.classList.contains('.error__button')) {
+        hideErrorBlock();
+      }
+    } else {
+      hideErrorBlock();
+    }
+  });
+  body.append(templateItem);
+};
+
+export {isEscapeKey, checkStringLength, showLoadBlock, showErrorLoad, hideLoadBlock, showSuccessBlock, showErrorBlock};

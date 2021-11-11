@@ -1,6 +1,6 @@
 import {isEscapeKey, checkStringLength} from './util.js';
 import {postData} from './server-load.js';
-import {showLoadBlock} from './util.js';
+import {showLoadBlock, hideLoadBlock, showSuccessBlock, showErrorBlock} from './util.js';
 
 const LIMIT_HASHTAG_LENGTH = 20;
 const LIMIT_HASHTAGS_LENGTH = 5;
@@ -20,7 +20,6 @@ const userImage = userImageForm.querySelector('.img-upload__user');
 const hashTagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const hashTagInput = userImageForm.querySelector('.text__hashtags');
 const imageEffect = document.querySelector('.img-upload__effects');
-const buttonPublish = document.querySelector('.img-upload__submit');
 
 const checkHashTag = () => {
   const valueHashTag = hashTagInput.value.trim().toLowerCase();
@@ -228,12 +227,24 @@ const onImgEffectsClick = (evt) => {
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
+  const formData = new FormData(evt.target);
   showLoadBlock();
-  postData(new FormData(evt.target))
+  postData(formData)
     .then((response) => {
       if (response.ok) {
-        closeFormEditImage();
+        setTimeout(() => {
+          closeFormEditImage();
+          hideLoadBlock();
+          showSuccessBlock();
+        }, 500);
       }
+    })
+    .catch (() => {
+      setTimeout(() => {
+        closeFormEditImage();
+        hideLoadBlock();
+        showErrorBlock();
+      }, 500);
     });
 };
 
@@ -262,7 +273,7 @@ function showFormEditImage () {
   buttonSmaller.addEventListener('click', onButtonSmallerClick);
   buttonBigger.addEventListener('click', onButtonBiggerClick);
   imageEffect.addEventListener('click', onImgEffectsClick);
-  buttonPublish.addEventListener('submit', onFormSubmit);
+  imageForm.addEventListener('submit', onFormSubmit);
 }
 
 function closeFormEditImage () {
@@ -275,7 +286,7 @@ function closeFormEditImage () {
   buttonSmaller.removeEventListener('click', onButtonSmallerClick);
   buttonBigger.removeEventListener('click', onButtonBiggerClick);
   imageEffect.removeEventListener('click', onImgEffectsClick);
-  buttonPublish.removeEventListener('submit', onFormSubmit);
+  imageForm.removeEventListener('submit', onFormSubmit);
   resetUserImageForm();
 }
 
