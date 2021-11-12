@@ -58,7 +58,7 @@ const showSuccessBlock = () => {
     const successBlock = document.querySelector('.success__inner');
     const element = evt.target;
     if (successBlock.contains(element)) {
-      if (element.classList.contains('.success__button')) {
+      if (element.classList.contains('success__button')) {
         hideSuccessBlock();
       }
     } else {
@@ -94,7 +94,8 @@ const showErrorBlock = () => {
     const successBlock = document.querySelector('.error__inner');
     const element = evt.target;
     if (successBlock.contains(element)) {
-      if (element.classList.contains('.error__button')) {
+      if (element.classList.contains('error__button')) {
+        console.log(classList)
         hideErrorBlock();
       }
     } else {
