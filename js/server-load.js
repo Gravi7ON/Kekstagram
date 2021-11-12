@@ -1,4 +1,4 @@
-import {showErrorLoad} from './util.js';
+import {showErrorLoadWrapper} from './util.js';
 
 const loadData = () => fetch('https://24.javascript.pages.academy/kekstagram/data')
   .then((response) => {
@@ -7,7 +7,7 @@ const loadData = () => fetch('https://24.javascript.pages.academy/kekstagram/dat
     }
     throw new Error(`${response.status}. Попробуйте перезагрузить страницу.`);
   }).catch((err) => {
-    showErrorLoad(`Ошибка получения данных с сервера. ${err}`);
+    showErrorLoadWrapper(`Ошибка получения данных с сервера. ${err}`);
   });
 
 
