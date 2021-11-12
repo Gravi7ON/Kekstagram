@@ -95,7 +95,6 @@ const showErrorBlock = () => {
     const element = evt.target;
     if (successBlock.contains(element)) {
       if (element.classList.contains('error__button')) {
-        console.log(classList)
         hideErrorBlock();
       }
     } else {
