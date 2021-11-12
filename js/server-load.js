@@ -1,15 +1,10 @@
-import {showErrorLoadWrapper} from './util.js';
-
 const loadData = () => fetch('https://24.javascript.pages.academy/kekstagram/data')
   .then((response) => {
     if (response.ok) {
       return response.json();
     }
     throw new Error(`${response.status}. Попробуйте перезагрузить страницу.`);
-  }).catch((err) => {
-    showErrorLoadWrapper(`Ошибка получения данных с сервера. ${err}`);
   });
-
 
 const postData = (body) => fetch(
   'https://24.javascript.pages.academy/kekstagram',
