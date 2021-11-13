@@ -1,24 +1,17 @@
-import {showthumbnail} from './rendering-of-thumbnails.js';
-import {showBigImage, showPostPreview} from './rendering-of-big-image.js';
-import {userImages} from './data.js';
 import './form.js';
+import {loadData} from './server-load.js';
+import {getImageWrapper} from './rendering-of-thumbnails.js';
+import {showErrorLoadWrapper} from './util.js';
 
-const thumbnail = document.querySelector('.pictures');
+const imageFilters = document.querySelector('.img-filters');
 
-const showUserPost = (optionImage) => {
-  showBigImage();
-  showPostPreview(optionImage);
-};
+loadData()
+  .then((image) => {
+    if (image) {
+      getImageWrapper(image);
+    }
+  }).catch((err) => {
+    showErrorLoadWrapper(`Ошибка получения данных с сервера. ${err}`);
+  });
 
-thumbnail.addEventListener('click', (evt) => {
-  const optionImage = userImages.find((element) => element.id === +evt.target.dataset.id);
-  if(!optionImage) {
-    return;
-  }
-  showUserPost(optionImage);
-});
-
-userImages.forEach((item) => {
-  const thumbnailElement = showthumbnail(item);
-  thumbnail.append(thumbnailElement);
-});
+imageFilters.classList.remove('img-filters--inactive');

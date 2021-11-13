@@ -1,4 +1,7 @@
+import {showBigImage, showPostPreview} from './rendering-of-big-image.js';
+
 const templateFragment = document.querySelector('#picture').content;
+const imagesWrapper = document.querySelector('.pictures');
 const templateImage = templateFragment.querySelector('a');
 const fragment = document.createDocumentFragment();
 
@@ -13,4 +16,23 @@ const showthumbnail = (({url, likes, comments, id}) => {
   return fragment;
 });
 
-export {showthumbnail};
+const showUserPost = (optionImage) => {
+  showBigImage();
+  showPostPreview(optionImage);
+};
+
+const getImageWrapper = (image) => {
+  image.forEach((item) => {
+    const thumbnailElement = showthumbnail(item);
+    imagesWrapper.append(thumbnailElement);
+  });
+  imagesWrapper.addEventListener('click', (evt) => {
+    const optionImage = image.find((element) => element.id === +evt.target.dataset.id);
+    if(!optionImage) {
+      return;
+    }
+    showUserPost(optionImage);
+  });
+};
+
+export {getImageWrapper};

@@ -1,4 +1,6 @@
 import {isEscapeKey, checkStringLength} from './util.js';
+import {postData} from './server-load.js';
+import {showLoadBlock, hideLoadBlock, showSuccessBlock, showErrorBlock} from './util.js';
 
 const LIMIT_HASHTAG_LENGTH = 20;
 const LIMIT_HASHTAGS_LENGTH = 5;
@@ -223,6 +225,29 @@ const onImgEffectsClick = (evt) => {
   }
 };
 
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  const formData = new FormData(evt.target);
+  showLoadBlock();
+  postData(formData)
+    .then((response) => {
+      if (response.ok) {
+        setTimeout(() => {
+          closeFormEditImage();
+          hideLoadBlock();
+          showSuccessBlock();
+        }, 500);
+      }
+    })
+    .catch (() => {
+      setTimeout(() => {
+        closeFormEditImage();
+        hideLoadBlock();
+        showErrorBlock();
+      }, 500);
+    });
+};
+
 const resetUserImageForm = () => {
   userImageLoad.value = '';
   imageForm.reset();
@@ -248,6 +273,7 @@ function showFormEditImage () {
   buttonSmaller.addEventListener('click', onButtonSmallerClick);
   buttonBigger.addEventListener('click', onButtonBiggerClick);
   imageEffect.addEventListener('click', onImgEffectsClick);
+  imageForm.addEventListener('submit', onFormSubmit);
 }
 
 function closeFormEditImage () {
@@ -260,6 +286,7 @@ function closeFormEditImage () {
   buttonSmaller.removeEventListener('click', onButtonSmallerClick);
   buttonBigger.removeEventListener('click', onButtonBiggerClick);
   imageEffect.removeEventListener('click', onImgEffectsClick);
+  imageForm.removeEventListener('submit', onFormSubmit);
   resetUserImageForm();
 }
 
