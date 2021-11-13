@@ -4,7 +4,8 @@ const loadData = () => fetch('https://24.javascript.pages.academy/kekstagram/dat
       return response.json();
     }
     throw new Error(`${response.status}. Попробуйте перезагрузить страницу.`);
-  }).catch(() => {
+  })
+  .catch(() => {
     throw new Error('Faild to fetch. Попробуйте перезагрузить страницу.');
   });
 
