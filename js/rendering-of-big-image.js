@@ -1,19 +1,18 @@
+/* eslint-disable prefer-const */
 import {isEscapeKey} from './util.js';
 
-//Переменные для показа и скрытия полноэкранного режима
 const bodyPage = document.querySelector('body');
 const imageBig = bodyPage.querySelector('.big-picture');
 const buttonCloseBigImage = imageBig.querySelector('.big-picture__cancel');
-//const blockCommentCount = imageBig.querySelector('.social__comment-count');
-//const blockCommentsLoad = imageBig.querySelector('.comments-loader');
-
-//Переменные для работы с данными
+const blockCommentCount = imageBig.querySelector('.social__comment-count');
+const buttonCommentsLoad = imageBig.querySelector('.comments-loader');
 const urlData = imageBig.querySelector('.big-picture__img');
 const likeData = imageBig.querySelector('.likes-count');
 const commentData = imageBig.querySelector('.comments-count');
 const descriptionData = imageBig.querySelector('.social__caption');
 const commentListData = imageBig.querySelector('.social__comments');
 const commentListDataTemplate = imageBig.querySelector('.social__comment');
+const commentCurrent = blockCommentCount.querySelector('.comments-current');
 const imageFragment = document.createDocumentFragment();
 
 const onBigImageEscKeydown = (evt) => {
@@ -35,6 +34,7 @@ function showBigImage () {
   buttonCloseBigImage.addEventListener('click', onButtonCloseClick);
 
   commentListData.innerHTML = '';
+  commentCurrent.textContent = '';
 }
 
 function closeBigImage () {
@@ -45,21 +45,50 @@ function closeBigImage () {
   buttonCloseBigImage.removeEventListener('click', onButtonCloseClick);
 }
 
-const showPostPreview = (({url, likes, comments, description}) => {
-  urlData.querySelector('img').setAttribute('src', url);
-  likeData.textContent = likes;
-  commentData.textContent = comments.length;
-  descriptionData.textContent = description;
+// let commentCountShow = 0;
+// let commentsBlock = [];
 
+// function getCurrentComments () {
+//   if (commentsBlock.length <= 5) {
+//     buttonCommentsLoad.classList.add('hidden');
+//   }
+
+//   const currentComments = commentsBlock.splice(0, 5);
+//   commentCountShow += currentComments.length;
+//   commentCurrent.textContent = commentCountShow;
+
+//   return currentComments;
+// }
+
+const createCurrentComments = (comments) => {
   comments.forEach(({avatar, name, message}) => {
     const imageElement = commentListDataTemplate.cloneNode(true);
     imageElement.querySelector('.social__picture').setAttribute('src', avatar);
     imageElement.querySelector('.social__picture').setAttribute('alt', name);
     imageElement.querySelector('.social__text').textContent = message;
 
+
     imageFragment.appendChild(imageElement);
   });
+};
+
+const showPostPreview = (({url, likes, comments, description}) => {
+  urlData.querySelector('img').setAttribute('src', url);
+  likeData.textContent = likes;
+  commentData.textContent = comments.length;
+  descriptionData.textContent = description;
+
+  const countCurrent = commentCurrent.textContent = comments.length;
+  if (countCurrent >= comments.length) {
+    buttonCommentsLoad.classList.add('hidden');
+  } else {
+    buttonCommentsLoad.classList.remove('hidden');
+  }
+
+  createCurrentComments(comments);
   commentListData.appendChild(imageFragment);
+
 });
+//buttonCloseBigImage.addEventListener('click', createCurrentComments(comments));
 
 export {showBigImage, showPostPreview};
