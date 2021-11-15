@@ -8,18 +8,20 @@ const imgFiltersBlock = document.querySelector('.img-filters');
 const imgFiltersForm = document.querySelector('.img-filters__form');
 
 loadData()
-  .then((image) => {
-    if (image) {
-      getImageWrapper(image);
+  .then((posts) => {
+    if (posts) {
+      getImageWrapper(posts);
       imgFiltersBlock.classList.remove('img-filters--inactive');
 
       imgFiltersForm.addEventListener('click', (evt) => {
         const activeFilter = setActiveFilter(evt);
+        if(!activeFilter) {
+          return;
+        }
+        const sortedImage = sortingImages(activeFilter, posts).filter((item) => !!item);
 
-        const sortedImage = sortingImages(activeFilter, image).filter((item) => !!item);
-
-        const pictures = document.querySelectorAll('.picture');
-        pictures.forEach((item) => {
+        const postElement = document.querySelectorAll('.picture');
+        postElement.forEach((item) => {
           item.remove();
         });
 
