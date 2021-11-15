@@ -38,7 +38,8 @@ const setActiveFilter = (evt) => {
   if(evt.target.closest('.img-filters__button')) {
     evt.target.classList.add('img-filters__button--active');
     const sortName = evt.target.id;
-    sortingImages(sortName);
+
+    return sortName;
   }
 };
 
