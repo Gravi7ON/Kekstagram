@@ -1,6 +1,6 @@
 import {isEscapeKey, checkStringLength} from './util.js';
 import {postData} from './server-load.js';
-import {showLoadBlock, hideLoadBlock, showSuccessBlock, showErrorBlock} from './util.js';
+import {showLoadBlock, hideLoadBlock, showSuccessBlock, showErrorBlock} from './notice.js';
 
 const LIMIT_HASHTAG_LENGTH = 20;
 const LIMIT_HASHTAGS_LENGTH = 5;
