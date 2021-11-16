@@ -21,6 +21,14 @@ const hashTagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const hashTagInput = userImageForm.querySelector('.text__hashtags');
 const imageEffect = document.querySelector('.img-upload__effects');
 
+const markInvalid = (element) => {
+  element.style.borderColor = 'red';
+};
+
+const markValid = (element) => {
+  element.style.borderColor = 'initial';
+};
+
 const checkHashTag = () => {
   const valueHashTag = hashTagInput.value.trim().toLowerCase();
   const valueHashTags = valueHashTag.split(' ');
@@ -28,21 +36,30 @@ const checkHashTag = () => {
 
   if (valueHashTags.length > LIMIT_HASHTAGS_LENGTH) {
     hashTagInput.setCustomValidity('Не более 5 хеш-тегов');
+    markInvalid(hashTagInput);
   } else if (valueHashTags.length > hashTagsUniq.length) {
     hashTagInput.setCustomValidity('Хеш-теги не должны повторяться');
+    markInvalid(hashTagInput);
   } else {
     hashTagInput.setCustomValidity('');
+    markValid(hashTagInput);
   }
 
   valueHashTags.forEach((tag) => {
     if (tag === '#') {
       hashTagInput.setCustomValidity('Хеш-тег не может состоять только из одного символа #');
+      markInvalid(hashTagInput);
     } else if (!tag.startsWith('#')) {
       hashTagInput.setCustomValidity('Хеш-тег начинается с символа #');
+      markInvalid(hashTagInput);
     } else if (tag.length > LIMIT_HASHTAG_LENGTH) {
       hashTagInput.setCustomValidity(`Удалите лишние ${ valueHashTag.length - LIMIT_HASHTAG_LENGTH} симв.`);
+      markInvalid(hashTagInput);
     } else if (!hashTagExpression.test(tag)) {
       hashTagInput.setCustomValidity('Хеш-тег не содержит пробелы, спецсимволы (@, $...), тире, дефис, запятая, эмодзи ...');
+      markInvalid(hashTagInput);
+    } else {
+      markValid(hashTagInput);
     }
   });
 
@@ -52,8 +69,10 @@ const checkHashTag = () => {
 const checkTextDescription = () => {
   if (!checkStringLength(textDescriptionInput.value, LIMIT_COMMENT_LENGTH)) {
     textDescriptionInput.setCustomValidity('Не более 140 символов');
+    markInvalid(textDescriptionInput);
   } else {
     textDescriptionInput.setCustomValidity('');
+    markValid(textDescriptionInput);
   }
   textDescriptionInput.reportValidity();
 };

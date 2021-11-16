@@ -3,6 +3,7 @@ import {loadData} from './server-load.js';
 import {getImageWrapper} from './rendering-of-thumbnails.js';
 import {showErrorLoadWrapper} from './notice.js';
 import {setActiveFilter, sortingImages} from './image-sorting.js';
+import {debounce} from './util.js';
 
 const imgFiltersBlock = document.querySelector('.img-filters');
 const imgFiltersForm = document.querySelector('.img-filters__form');
@@ -13,7 +14,7 @@ loadData()
       getImageWrapper(posts);
       imgFiltersBlock.classList.remove('img-filters--inactive');
 
-      imgFiltersForm.addEventListener('click', (evt) => {
+      imgFiltersForm.addEventListener('click', debounce((evt) => {
         const activeFilter = setActiveFilter(evt);
         if(!activeFilter) {
           return;
@@ -26,7 +27,7 @@ loadData()
         });
 
         getImageWrapper(sortedImage);
-      });
+      }));
     }
   })
   .catch((err) => {
