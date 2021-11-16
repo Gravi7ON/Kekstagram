@@ -17,12 +17,10 @@ const sortingImages = (sortName, data) => {
   }
 
   if(sortName === 'filter-random') {
-    //const uniqIds = getRandomIntInclusive(0, data.length - 1);
     const randomImages = [];
 
     for(let i = 0; i < AMOUNT_RANDOM_POSTS; i++) {
       randomImages.push(data[getRandomIntInclusive(0, data.length - 1)]);
-      console.log(randomImages);
       if(hasDuplicate(randomImages)) {
         randomImages.pop();
         i--;
