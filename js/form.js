@@ -59,7 +59,6 @@ const checkHashTag = () => {
       hashTagInput.setCustomValidity('Хеш-тег не содержит пробелы, спецсимволы (@, $...), тире, дефис, запятая, эмодзи ...');
       markInvalid(hashTagInput);
     } else {
-      hashTagInput.style.borderColor = 'red';
       markValid(hashTagInput);
     }
   });
