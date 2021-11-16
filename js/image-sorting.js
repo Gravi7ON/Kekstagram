@@ -1,4 +1,6 @@
-import {getRandomNotRepeat} from './util.js';
+import {getRandomIntInclusive} from './util.js';
+
+const AMOUNT_RANDOM_POSTS = 10;
 
 const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
 
@@ -15,11 +17,12 @@ const sortingImages = (sortName, data) => {
   }
 
   if(sortName === 'filter-random') {
-    const uniqIds = getRandomNotRepeat(data.length);
+    //const uniqIds = getRandomIntInclusive(0, data.length - 1);
     const randomImages = [];
 
-    for(let i = 0; i < 10; i++) {
-      randomImages.push(data[uniqIds()]);
+    for(let i = 0; i < AMOUNT_RANDOM_POSTS; i++) {
+      randomImages.push(data[getRandomIntInclusive(0, data.length - 1)]);
+      console.log(randomImages);
       if(hasDuplicate(randomImages)) {
         randomImages.pop();
         i--;
