@@ -26,4 +26,5 @@ function getRandomPositiveInteger (a, b) {
   // потому что Math.random() генерирует только дробные числа и ноль.
   return Math.floor(result);
 }
-getRandomPositiveInteger();
+
+export {getRandomPositiveInteger};
