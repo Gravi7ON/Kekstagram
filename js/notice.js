@@ -5,7 +5,7 @@ const imgUploadMessage = body.querySelector('#messages');
 const imgSuccessMessage = body.querySelector('#success');
 const imgErrorMessage = body.querySelector('#error');
 
-const showErrorLoadWrapper = (message) => {
+const showErrorLoadWrapper = function (message) {
   const errorBlock = document.createElement('div');
   errorBlock.style.zIndex = 100;
   errorBlock.style.position = 'absolute';
@@ -27,12 +27,12 @@ const showErrorLoadWrapper = (message) => {
   }, 4000);
 };
 
-const showLoadBlock = () => {
+const showLoadBlock = function () {
   const templateItem = imgUploadMessage.content.cloneNode(true);
   body.append(templateItem);
 };
 
-const hideLoadBlock = () => {
+const hideLoadBlock = function () {
   const blockLoad = body.querySelector('.img-upload__message');
   if (!blockLoad) {
     return;
@@ -40,14 +40,14 @@ const hideLoadBlock = () => {
   blockLoad.remove();
 };
 
-const onSuccessEscKeydown = (evt) => {
+const onSuccessEscKeydown = function (evt) {
   if (isEscapeKey (evt)) {
     evt.preventDefault();
     hideSuccessBlock();
   }
 };
 
-const onSuccessClick = (evt) => {
+const onSuccessClick =function (evt) {
   const successBlock = body.querySelector('.success__inner');
   const element = evt.target;
   if (successBlock.contains(element)) {
@@ -59,7 +59,7 @@ const onSuccessClick = (evt) => {
   }
 };
 
-const showSuccessBlock = () => {
+const showSuccessBlock = function () {
   const templateItem = imgSuccessMessage.content.cloneNode(true);
 
   document.body.addEventListener('click', onSuccessClick);
@@ -79,14 +79,14 @@ function hideSuccessBlock () {
   document.body.removeEventListener('click', onSuccessClick);
 }
 
-const onErrorEscKeydown = (evt) => {
+const onErrorEscKeydown = function (evt) {
   if (isEscapeKey (evt)) {
     evt.preventDefault();
     hideErrorBlock();
   }
 };
 
-const onErrorClick = (evt) => {
+const onErrorClick = function (evt) {
   const errorBlock = body.querySelector('.error__inner');
   const element = evt.target;
   if (errorBlock.contains(element)) {
@@ -98,7 +98,7 @@ const onErrorClick = (evt) => {
   }
 };
 
-const showErrorBlock = () => {
+const showErrorBlock = function () {
   const templateItem = imgErrorMessage.content.cloneNode(true);
 
   document.body.addEventListener('click', onErrorClick);

@@ -5,7 +5,7 @@ const imagesWrapper = document.querySelector('.pictures');
 const templateImage = templateFragment.querySelector('a');
 const fragment = document.createDocumentFragment();
 
-const showthumbnail = (({url, likes, comments, id}) => {
+const showthumbnail = function ({url, likes, comments, id}) {
   const image = templateImage.cloneNode(true);
   image.querySelector('img').setAttribute('src', url);
   image.querySelector('img').setAttribute('data-id', id);
@@ -14,14 +14,14 @@ const showthumbnail = (({url, likes, comments, id}) => {
   fragment.appendChild(image);
 
   return fragment;
-});
+};
 
-const showUserPost = (optionImage) => {
+const showUserPost = function (optionImage) {
   showBigImage();
   showPostPreview(optionImage);
 };
 
-const getImageWrapper = (images) => {
+const getImageWrapper = function (images) {
   images.forEach((item) => {
     const thumbnailElement = showthumbnail(item);
     imagesWrapper.append(thumbnailElement);

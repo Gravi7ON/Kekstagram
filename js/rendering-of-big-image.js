@@ -20,18 +20,18 @@ const imageFragment = document.createDocumentFragment();
 let commentsList;
 let displayedComments;
 
-const onBigImageEscKeydown = (evt) => {
+const onBigImageEscKeydown = function (evt) {
   if (isEscapeKey (evt)) {
     evt.preventDefault();
     closeBigImage();
   }
 };
 
-const onButtonCloseClick = () => {
+const onButtonCloseClick = function () {
   closeBigImage();
 };
 
-const onButtonLoadClick = (evt) => {
+const onButtonLoadClick = function (evt) {
   if (evt.target.closest('.comments-loader')) {
     const commentsFragment = document.createDocumentFragment();
     displayedComments = [...displayedComments, ...commentsList.slice(displayedComments.length, displayedComments.length + DISPLAYED_CURRENT_COMMENT_COUNT)];
@@ -70,7 +70,7 @@ function closeBigImage () {
   document.body.removeEventListener('click', onButtonLoadClick);
 }
 
-const createCurrentComments = (comments) => {
+const createCurrentComments = function (comments) {
   const results = [];
 
   comments.forEach(({avatar, name, message}) => {
@@ -84,7 +84,7 @@ const createCurrentComments = (comments) => {
   return results;
 };
 
-const showPostPreview = (({url, likes, comments, description}) => {
+const showPostPreview = function ({url, likes, comments, description}) {
   urlData.querySelector('img').setAttribute('src', url);
   likeData.textContent = likes;
   commentData.textContent = comments.length;
@@ -107,6 +107,6 @@ const showPostPreview = (({url, likes, comments, description}) => {
   });
   commentListData.appendChild(imageFragment);
   commentCurrent.textContent = displayedComments.length;
-});
+};
 
 export {showBigImage, showPostPreview};

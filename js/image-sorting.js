@@ -4,9 +4,11 @@ const AMOUNT_RANDOM_POSTS = 10;
 
 const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
 
-const hasDuplicate = (array) => (new Set(array)).size !== array.length;
+const hasDuplicate = function (array) {
+  (new Set(array)).size !== array.length;
+};
 
-const chooseImages = (sortName, data) => {
+const chooseImages = function (sortName, data) {
   if(sortName === 'filter-default') {
     return(data);
   }
@@ -31,7 +33,7 @@ const chooseImages = (sortName, data) => {
   return data;
 };
 
-const setActiveFilter = (evt) => {
+const setActiveFilter = function (evt) {
   imageFiltersButtons.forEach((btn) => {
     btn.classList.remove('img-filters__button--active');
   });
