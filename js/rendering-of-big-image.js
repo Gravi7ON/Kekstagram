@@ -71,7 +71,7 @@ function closeBigImage () {
 }
 
 const createCurrentComments = (comments) => {
-  const result = [];
+  const results = [];
 
   comments.forEach(({avatar, name, message}) => {
     const imageElement = commentListDataTemplate.cloneNode(true);
@@ -79,9 +79,9 @@ const createCurrentComments = (comments) => {
     imageElement.querySelector('.social__picture').setAttribute('alt', name);
     imageElement.querySelector('.social__text').textContent = message;
 
-    result.push(imageElement);
+    results.push(imageElement);
   });
-  return result;
+  return results;
 };
 
 const showPostPreview = (({url, likes, comments, description}) => {

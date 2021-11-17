@@ -1,4 +1,5 @@
-import {isEscapeKey, checkStringLength} from './util.js';
+import {isEscapeKey} from './util.js';
+import {checkStringLength} from './utils/check-string-length.js';
 import {postData} from './server-load.js';
 import {showLoadBlock, hideLoadBlock, showSuccessBlock, showErrorBlock} from './notice.js';
 
@@ -11,15 +12,15 @@ const MAX_IMAGE_SCALE = 100;
 const STEP_IMAGE_SCALE = 25;
 
 const body = document.querySelector('body');
-const userImageForm = document.querySelector('.img-upload__overlay');
-const userImageLoad = document.querySelector('#upload-file');
-const imageForm = document.querySelector('.img-upload__form');
+const imageForm = body.querySelector('.img-upload__form');
+const userImageForm = imageForm.querySelector('.img-upload__overlay');
+const userImageLoad = imageForm.querySelector('#upload-file');
 const buttonCloseImageForm = userImageForm.querySelector('#upload-cancel');
 const textDescriptionInput = userImageForm.querySelector('.text__description');
 const userImage = userImageForm.querySelector('.img-upload__user');
 const hashTagExpression = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const hashTagInput = userImageForm.querySelector('.text__hashtags');
-const imageEffect = document.querySelector('.img-upload__effects');
+const imageEffect = userImageForm.querySelector('.img-upload__effects');
 
 const markInvalid = (element) => {
   element.style.borderColor = 'red';
@@ -29,7 +30,7 @@ const markValid = (element) => {
   element.style.borderColor = 'initial';
 };
 
-const checkHashTag = () => {
+const onHashTagInput = () => {
   const valueHashTag = hashTagInput.value.trim().toLowerCase();
   const valueHashTags = valueHashTag.split(' ');
   const hashTagsUniq = [...new Set(valueHashTags)];
@@ -37,36 +38,42 @@ const checkHashTag = () => {
   if (valueHashTags.length > LIMIT_HASHTAGS_LENGTH) {
     hashTagInput.setCustomValidity('Не более 5 хеш-тегов');
     markInvalid(hashTagInput);
+    return;
   } else if (valueHashTags.length > hashTagsUniq.length) {
     hashTagInput.setCustomValidity('Хеш-теги не должны повторяться');
     markInvalid(hashTagInput);
+    return;
   } else {
     hashTagInput.setCustomValidity('');
     markValid(hashTagInput);
   }
 
-  valueHashTags.forEach((tag) => {
-    if (tag === '#') {
+  for (let i = 0; i < valueHashTags.length; i++) {
+    if (valueHashTags[i] === '#') {
       hashTagInput.setCustomValidity('Хеш-тег не может состоять только из одного символа #');
       markInvalid(hashTagInput);
-    } else if (!tag.startsWith('#')) {
+      return;
+    } else if (!valueHashTags[i].startsWith('#')) {
       hashTagInput.setCustomValidity('Хеш-тег начинается с символа #');
       markInvalid(hashTagInput);
-    } else if (tag.length > LIMIT_HASHTAG_LENGTH) {
-      hashTagInput.setCustomValidity(`Удалите лишние ${ valueHashTag.length - LIMIT_HASHTAG_LENGTH} симв.`);
+      return;
+    } else if (valueHashTags.length > LIMIT_HASHTAG_LENGTH) {
+      hashTagInput.setCustomValidity(`Удалите лишние ${valueHashTags[i].length - LIMIT_HASHTAG_LENGTH} симв.`);
       markInvalid(hashTagInput);
-    } else if (!hashTagExpression.test(tag)) {
+      return;
+    } else if (!hashTagExpression.test(valueHashTags[i])) {
       hashTagInput.setCustomValidity('Хеш-тег не содержит пробелы, спецсимволы (@, $...), тире, дефис, запятая, эмодзи ...');
       markInvalid(hashTagInput);
+      return;
     } else {
       markValid(hashTagInput);
     }
-  });
+  }
 
   hashTagInput.reportValidity();
 };
 
-const checkTextDescription = () => {
+const onTextDescriptionInput = () => {
   if (!checkStringLength(textDescriptionInput.value, LIMIT_COMMENT_LENGTH)) {
     textDescriptionInput.setCustomValidity('Не более 140 символов');
     markInvalid(textDescriptionInput);
@@ -88,11 +95,12 @@ const onButtonCloseClick = () => {
   closeFormEditImage();
 };
 
-const buttonSmaller = document.querySelector('.scale__control--smaller');
-const buttonBigger = document.querySelector('.scale__control--bigger');
-const scaleValue = document.querySelector('.scale__control--value');
-const imagePreview = document.querySelector('.img-upload__preview');
-const userImageScaleHidden = document.querySelector('.scale__value');
+const buttonSmaller = userImageForm.querySelector('.scale__control--smaller');
+const buttonBigger = userImageForm.querySelector('.scale__control--bigger');
+const scaleValue = userImageForm.querySelector('.scale__control--value');
+const imagePreview = userImageForm.querySelector('.img-upload__user');
+const userImageScaleHidden = body.querySelector('.scale__value');
+
 let imageScale = 100;
 
 function changeScaleImage () {
@@ -127,11 +135,12 @@ const onButtonBiggerClick = () => {
   userImageScaleHidden.textContent = imageScale;
 };
 
-const image = document.querySelector('.img-upload__preview img');
-const slider = document.querySelector('.effect-level__slider');
-const effectLevelValue = document.querySelector('.effect-level__value');
-const imageEffectsPreview = document.querySelectorAll('.effects__preview');
-const userImageFilteHidden = document.querySelector('.effect__value');
+const image = userImageForm.querySelector('.img-upload__preview img');
+const slider = userImageForm.querySelector('.effect-level__slider');
+const effectLevelValue = userImageForm.querySelector('.effect-level__value');
+const imageEffectsPreview = userImageForm.querySelectorAll('.effects__preview');
+const userImageFilteHidden = body.querySelector('.effect__value');
+//const sliderSubstrate = userImageForm.querySelector('.img-upload__effect-level');
 
 noUiSlider.create(slider, {
   range: {
@@ -144,10 +153,7 @@ noUiSlider.create(slider, {
   format: {
     to: function (value) {
       userImageFilteHidden.textContent = value;
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
-      return value.toFixed(1);
+      return (Number.isInteger(value)) ? value.toFixed(0) : value.toFixed(1);
     },
     from: function (value) {
       return parseFloat(value);
@@ -171,11 +177,11 @@ const onImgEffectsClick = (evt) => {
     image.style.filter = '';
     slider.style.display = 'none';
     slider.noUiSlider.off();
+    //sliderSubstrate.style.display = 'none';
   } else if(evt.target.closest('.effects__preview--chrome')) {
     image.className = 'effects__preview--chrome';
     slider.style.display = 'block';
     slider.noUiSlider.off();
-
     slider.noUiSlider.updateOptions({
       range: {
         min: 0,
@@ -287,8 +293,8 @@ function showFormEditImage () {
 
   document.addEventListener('keydown', onformEditEscKeydown);
   buttonCloseImageForm.addEventListener('click', onButtonCloseClick);
-  textDescriptionInput.addEventListener('input', checkTextDescription);
-  hashTagInput.addEventListener('input', checkHashTag);
+  textDescriptionInput.addEventListener('input', onTextDescriptionInput);
+  hashTagInput.addEventListener('input', onHashTagInput);
   buttonSmaller.addEventListener('click', onButtonSmallerClick);
   buttonBigger.addEventListener('click', onButtonBiggerClick);
   imageEffect.addEventListener('click', onImgEffectsClick);
@@ -300,8 +306,8 @@ function closeFormEditImage () {
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onformEditEscKeydown);
   buttonCloseImageForm.removeEventListener('click', onButtonCloseClick);
-  textDescriptionInput.removeEventListener('input', checkTextDescription);
-  hashTagInput.removeEventListener('input', checkHashTag);
+  textDescriptionInput.removeEventListener('input', onTextDescriptionInput);
+  hashTagInput.removeEventListener('input', onHashTagInput);
   buttonSmaller.removeEventListener('click', onButtonSmallerClick);
   buttonBigger.removeEventListener('click', onButtonBiggerClick);
   imageEffect.removeEventListener('click', onImgEffectsClick);

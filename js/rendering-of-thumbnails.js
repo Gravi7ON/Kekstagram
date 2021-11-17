@@ -21,13 +21,13 @@ const showUserPost = (optionImage) => {
   showPostPreview(optionImage);
 };
 
-const getImageWrapper = (image) => {
-  image.forEach((item) => {
+const getImageWrapper = (images) => {
+  images.forEach((item) => {
     const thumbnailElement = showthumbnail(item);
     imagesWrapper.append(thumbnailElement);
   });
   imagesWrapper.addEventListener('click', (evt) => {
-    const optionImage = image.find((element) => element.id === +evt.target.dataset.id);
+    const optionImage = images.find((element) => element.id === +evt.target.dataset.id);
     if(!optionImage) {
       return;
     }

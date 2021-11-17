@@ -2,11 +2,11 @@ import './form.js';
 import {loadData} from './server-load.js';
 import {getImageWrapper} from './rendering-of-thumbnails.js';
 import {showErrorLoadWrapper} from './notice.js';
-import {setActiveFilter, sortingImages} from './image-sorting.js';
-import {debounce} from './util.js';
+import {setActiveFilter, chooseImages} from './image-sorting.js';
+import {debounce} from './utils/debounce.js';
 
 const imgFiltersBlock = document.querySelector('.img-filters');
-const imgFiltersForm = document.querySelector('.img-filters__form');
+const imgFiltersForm = imgFiltersBlock.querySelector('.img-filters__form');
 
 loadData()
   .then((posts) => {
@@ -19,10 +19,10 @@ loadData()
         if(!activeFilter) {
           return;
         }
-        const sortedImage = sortingImages(activeFilter, posts).filter((item) => !!item);
+        const sortedImage = chooseImages(activeFilter, posts).filter((item) => !!item);
 
-        const postElement = document.querySelectorAll('.picture');
-        postElement.forEach((item) => {
+        const postsElements = document.body.querySelectorAll('.picture');
+        postsElements.forEach((item) => {
           item.remove();
         });
 

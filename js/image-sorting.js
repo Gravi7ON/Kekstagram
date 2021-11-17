@@ -1,4 +1,4 @@
-import {getRandomIntInclusive} from './util.js';
+import {getRandomPositiveInteger} from './utils/get-random-positive-integer.js';
 
 const AMOUNT_RANDOM_POSTS = 10;
 
@@ -6,7 +6,7 @@ const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
 
 const hasDuplicate = (array) => (new Set(array)).size !== array.length;
 
-const sortingImages = (sortName, data) => {
+const chooseImages = (sortName, data) => {
   if(sortName === 'filter-default') {
     return(data);
   }
@@ -20,7 +20,7 @@ const sortingImages = (sortName, data) => {
     const randomImages = [];
 
     for(let i = 0; i < AMOUNT_RANDOM_POSTS; i++) {
-      randomImages.push(data[getRandomIntInclusive(0, data.length - 1)]);
+      randomImages.push(data[getRandomPositiveInteger(0, data.length - 1)]);
       if(hasDuplicate(randomImages)) {
         randomImages.pop();
         i--;
@@ -44,4 +44,4 @@ const setActiveFilter = (evt) => {
   }
 };
 
-export {sortingImages, setActiveFilter};
+export {chooseImages, setActiveFilter};
