@@ -1,5 +1,3 @@
-const isEscapeKey = function (evt) {
-  evt.key === 'Escape';
-};
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 export {isEscapeKey};

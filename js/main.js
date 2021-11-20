@@ -5,16 +5,16 @@ import {showErrorLoadWrapper} from './notice.js';
 import {setActiveFilter, chooseImages} from './image-sorting.js';
 import {debounce} from './utils/debounce.js';
 
-const imgFiltersBlock = document.querySelector('.img-filters');
-const imgFiltersForm = imgFiltersBlock.querySelector('.img-filters__form');
+const imgFiltersBlockElement = document.querySelector('.img-filters');
+const imgFiltersFormElement = imgFiltersBlockElement.querySelector('.img-filters__form');
 
 loadData()
   .then((posts) => {
     if (posts) {
       getImageWrapper(posts);
-      imgFiltersBlock.classList.remove('img-filters--inactive');
+      imgFiltersBlockElement.classList.remove('img-filters--inactive');
 
-      imgFiltersForm.addEventListener('click', debounce((evt) => {
+      imgFiltersFormElement.addEventListener('click', debounce((evt) => {
         const activeFilter = setActiveFilter(evt);
         if(!activeFilter) {
           return;

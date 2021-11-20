@@ -2,13 +2,13 @@ import {getRandomPositiveInteger} from './utils/get-random-positive-integer.js';
 
 const AMOUNT_RANDOM_POSTS = 10;
 
-const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
+const imageFiltersButtonsElements = document.querySelectorAll('.img-filters__button');
 
-const hasDuplicate = function (array) {
+const hasDuplicate = (array) => {
   (new Set(array)).size !== array.length;
 };
 
-const chooseImages = function (sortName, data) {
+const chooseImages = (sortName, data) => {
   if(sortName === 'filter-default') {
     return(data);
   }
@@ -33,8 +33,8 @@ const chooseImages = function (sortName, data) {
   return data;
 };
 
-const setActiveFilter = function (evt) {
-  imageFiltersButtons.forEach((btn) => {
+const setActiveFilter = (evt) => {
+  imageFiltersButtonsElements.forEach((btn) => {
     btn.classList.remove('img-filters__button--active');
   });
 

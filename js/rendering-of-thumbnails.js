@@ -1,32 +1,32 @@
 import {showBigImage, showPostPreview} from './rendering-of-big-image.js';
 
-const templateFragment = document.querySelector('#picture').content;
-const imagesWrapper = document.querySelector('.pictures');
-const templateImage = templateFragment.querySelector('a');
-const fragment = document.createDocumentFragment();
+const templateFragmentElement = document.querySelector('#picture').content;
+const imagesWrapperElement = document.querySelector('.pictures');
+const templateImageElement = templateFragmentElement.querySelector('a');
+const fragmentElement = document.createDocumentFragment();
 
-const showthumbnail = function ({url, likes, comments, id}) {
-  const image = templateImage.cloneNode(true);
+const showthumbnail = ({url, likes, comments, id}) => {
+  const image = templateImageElement.cloneNode(true);
   image.querySelector('img').setAttribute('src', url);
   image.querySelector('img').setAttribute('data-id', id);
   image.querySelector('.picture__likes').textContent = likes;
   image.querySelector('.picture__comments').textContent = comments.length;
-  fragment.appendChild(image);
+  fragmentElement.appendChild(image);
 
-  return fragment;
+  return fragmentElement;
 };
 
-const showUserPost = function (optionImage) {
+const showUserPost = (optionImage) => {
   showBigImage();
   showPostPreview(optionImage);
 };
 
-const getImageWrapper = function (images) {
+const getImageWrapper = (images) => {
   images.forEach((item) => {
     const thumbnailElement = showthumbnail(item);
-    imagesWrapper.append(thumbnailElement);
+    imagesWrapperElement.append(thumbnailElement);
   });
-  imagesWrapper.addEventListener('click', (evt) => {
+  imagesWrapperElement.addEventListener('click', (evt) => {
     const optionImage = images.find((element) => element.id === +evt.target.dataset.id);
     if(!optionImage) {
       return;
