@@ -1,56 +1,56 @@
 import {isEscapeKey} from './util.js';
 
-const body = document.querySelector('body');
-const imgUploadMessage = body.querySelector('#messages');
-const imgSuccessMessage = body.querySelector('#success');
-const imgErrorMessage = body.querySelector('#error');
+const bodyElement = document.querySelector('body');
+const imgUploadMessageElement = bodyElement.querySelector('#messages');
+const imgSuccessMessageElement = bodyElement.querySelector('#success');
+const imgErrorMessageElement = bodyElement.querySelector('#error');
 
-const showErrorLoadWrapper = function (message) {
-  const errorBlock = document.createElement('div');
-  errorBlock.style.zIndex = 100;
-  errorBlock.style.position = 'absolute';
-  errorBlock.style.left = 0;
-  errorBlock.style.top = 0;
-  errorBlock.style.right = 0;
-  errorBlock.style.padding = '20px 3px';
-  errorBlock.style.fontSize = '17px';
-  errorBlock.style.fontFamily = 'Verdana, sans-serif';
-  errorBlock.style.textAlign = 'center';
-  errorBlock.style.backgroundColor = '#000000';
+const showErrorLoadWrapper = (message) => {
+  const errorBlockElement = document.createElement('div');
+  errorBlockElement.style.zIndex = 100;
+  errorBlockElement.style.position = 'absolute';
+  errorBlockElement.style.left = 0;
+  errorBlockElement.style.top = 0;
+  errorBlockElement.style.right = 0;
+  errorBlockElement.style.padding = '20px 3px';
+  errorBlockElement.style.fontSize = '17px';
+  errorBlockElement.style.fontFamily = 'Verdana, sans-serif';
+  errorBlockElement.style.textAlign = 'center';
+  errorBlockElement.style.backgroundColor = '#000000';
 
-  errorBlock.textContent = message;
+  errorBlockElement.textContent = message;
 
-  document.body.append(errorBlock);
+  document.body.append(errorBlockElement);
 
   setTimeout(() => {
-    errorBlock.remove();
+    errorBlockElement.remove();
   }, 4000);
 };
 
-const showLoadBlock = function () {
-  const templateItem = imgUploadMessage.content.cloneNode(true);
-  body.append(templateItem);
+const showLoadBlock = () => {
+  const templateItem = imgUploadMessageElement.content.cloneNode(true);
+  bodyElement.append(templateItem);
 };
 
-const hideLoadBlock = function () {
-  const blockLoad = body.querySelector('.img-upload__message');
-  if (!blockLoad) {
+const hideLoadBlock = () => {
+  const blockLoadElement = bodyElement.querySelector('.img-upload__message');
+  if (!blockLoadElement) {
     return;
   }
-  blockLoad.remove();
+  blockLoadElement.remove();
 };
 
-const onSuccessEscKeydown = function (evt) {
+const onSuccessEscKeydown = (evt) => {
   if (isEscapeKey (evt)) {
     evt.preventDefault();
     hideSuccessBlock();
   }
 };
 
-const onSuccessClick =function (evt) {
-  const successBlock = body.querySelector('.success__inner');
+const onSuccessClick = (evt) => {
+  const successBlockElement = bodyElement.querySelector('.success__inner');
   const element = evt.target;
-  if (successBlock.contains(element)) {
+  if (successBlockElement.contains(element)) {
     if (element.classList.contains('success__button')) {
       hideSuccessBlock();
     }
@@ -59,37 +59,37 @@ const onSuccessClick =function (evt) {
   }
 };
 
-const showSuccessBlock = function () {
-  const templateItem = imgSuccessMessage.content.cloneNode(true);
+const showSuccessBlock = () => {
+  const templateItem = imgSuccessMessageElement.content.cloneNode(true);
 
   document.body.addEventListener('click', onSuccessClick);
   document.body.addEventListener('keydown', onSuccessEscKeydown);
 
-  body.append(templateItem);
+  bodyElement.append(templateItem);
 };
 
 function hideSuccessBlock () {
-  const successBlockHide = body.querySelector('.success');
-  if (!successBlockHide) {
+  const successBlockHideElement = bodyElement.querySelector('.success');
+  if (!successBlockHideElement) {
     return;
   }
-  successBlockHide.remove();
+  successBlockHideElement.remove();
 
   document.body.removeEventListener('keydown', onSuccessEscKeydown);
   document.body.removeEventListener('click', onSuccessClick);
 }
 
-const onErrorEscKeydown = function (evt) {
+const onErrorEscKeydown = (evt) => {
   if (isEscapeKey (evt)) {
     evt.preventDefault();
     hideErrorBlock();
   }
 };
 
-const onErrorClick = function (evt) {
-  const errorBlock = body.querySelector('.error__inner');
+const onErrorClick = (evt) => {
+  const errorBlockElement = bodyElement.querySelector('.error__inner');
   const element = evt.target;
-  if (errorBlock.contains(element)) {
+  if (errorBlockElement.contains(element)) {
     if (element.classList.contains('error__button')) {
       hideErrorBlock();
     }
@@ -98,21 +98,21 @@ const onErrorClick = function (evt) {
   }
 };
 
-const showErrorBlock = function () {
-  const templateItem = imgErrorMessage.content.cloneNode(true);
+const showErrorBlock = () => {
+  const templateItem = imgErrorMessageElement.content.cloneNode(true);
 
   document.body.addEventListener('click', onErrorClick);
   document.body.addEventListener('keydown', onErrorEscKeydown);
 
-  body.append(templateItem);
+  bodyElement.append(templateItem);
 };
 
 function hideErrorBlock () {
-  const errorBlockHide = body.querySelector('.error');
-  if (!errorBlockHide) {
+  const errorBlockHideElement = bodyElement.querySelector('.error');
+  if (!errorBlockHideElement) {
     return;
   }
-  errorBlockHide.remove();
+  errorBlockHideElement.remove();
 
   document.body.removeEventListener('keydown', onErrorEscKeydown);
   document.body.removeEventListener('click', onErrorClick);

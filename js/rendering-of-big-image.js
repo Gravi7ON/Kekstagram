@@ -3,78 +3,78 @@ import {isEscapeKey} from './util.js';
 
 const DISPLAYED_CURRENT_COMMENT_COUNT = 5;
 
-const bodyPage = document.querySelector('body');
-const imageBig = bodyPage.querySelector('.big-picture');
-const buttonCloseBigImage = imageBig.querySelector('.big-picture__cancel');
-const blockCommentCount = imageBig.querySelector('.social__comment-count');
-const buttonCommentsLoad = imageBig.querySelector('.comments-loader');
-const urlData = imageBig.querySelector('.big-picture__img');
-const likeData = imageBig.querySelector('.likes-count');
-const commentData = imageBig.querySelector('.comments-count');
-const descriptionData = imageBig.querySelector('.social__caption');
-const commentListData = imageBig.querySelector('.social__comments');
-const commentListDataTemplate = imageBig.querySelector('.social__comment');
-const commentCurrent = blockCommentCount.querySelector('.comments-current');
-const imageFragment = document.createDocumentFragment();
+const bodyPageElement = document.querySelector('body');
+const imageBigElement = bodyPageElement.querySelector('.big-picture');
+const buttonCloseBigImageElement = imageBigElement.querySelector('.big-picture__cancel');
+const blockCommentCountElement = imageBigElement.querySelector('.social__comment-count');
+const buttonCommentsLoadElement = imageBigElement.querySelector('.comments-loader');
+const urlDataElement = imageBigElement.querySelector('.big-picture__img');
+const likeDataElement = imageBigElement.querySelector('.likes-count');
+const commentDataElement = imageBigElement.querySelector('.comments-count');
+const descriptionDataElement = imageBigElement.querySelector('.social__caption');
+const commentListDataElement = imageBigElement.querySelector('.social__comments');
+const commentListDataTemplateElement = imageBigElement.querySelector('.social__comment');
+const commentCurrentElement = blockCommentCountElement.querySelector('.comments-current');
+const imageFragmentElement = document.createDocumentFragment();
 
 let commentsList;
 let displayedComments;
 
-const onBigImageEscKeydown = function (evt) {
+const onBigImageEscKeydown = (evt) => {
   if (isEscapeKey (evt)) {
     evt.preventDefault();
     closeBigImage();
   }
 };
 
-const onButtonCloseClick = function () {
+const onButtonCloseClick = () => {
   closeBigImage();
 };
 
-const onButtonLoadClick = function (evt) {
+const onButtonLoadClick = (evt) => {
   if (evt.target.closest('.comments-loader')) {
-    const commentsFragment = document.createDocumentFragment();
+    const commentsFragmentElement = document.createDocumentFragment();
     displayedComments = [...displayedComments, ...commentsList.slice(displayedComments.length, displayedComments.length + DISPLAYED_CURRENT_COMMENT_COUNT)];
 
     displayedComments.forEach((commentItem) => {
-      commentsFragment.appendChild(commentItem);
+      commentsFragmentElement.appendChild(commentItem);
     });
-    commentListData.innerHTML = '';
-    commentListData.appendChild(commentsFragment);
-    commentCurrent.textContent = displayedComments.length;
+    commentListDataElement.innerHTML = '';
+    commentListDataElement.appendChild(commentsFragmentElement);
+    commentCurrentElement.textContent = displayedComments.length;
 
     if (displayedComments.length === commentsList.length) {
-      buttonCommentsLoad.classList.add('hidden');
+      buttonCommentsLoadElement.classList.add('hidden');
     }
   }
 };
 
 function showBigImage () {
-  imageBig.classList.remove('hidden');
-  bodyPage.classList.add('modal-open');
+  imageBigElement.classList.remove('hidden');
+  bodyPageElement.classList.add('modal-open');
 
   document.addEventListener('keydown', onBigImageEscKeydown);
-  buttonCloseBigImage.addEventListener('click', onButtonCloseClick);
+  buttonCloseBigImageElement.addEventListener('click', onButtonCloseClick);
   document.body.addEventListener('click', onButtonLoadClick);
 
-  commentListData.innerHTML = '';
+  commentListDataElement.innerHTML = '';
 }
 
 function closeBigImage () {
-  imageBig.classList.add('hidden');
-  buttonCommentsLoad.classList.remove('hidden');
-  bodyPage.classList.remove('modal-open');
+  imageBigElement.classList.add('hidden');
+  buttonCommentsLoadElement.classList.remove('hidden');
+  bodyPageElement.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onBigImageEscKeydown);
-  buttonCloseBigImage.removeEventListener('click', onButtonCloseClick);
+  buttonCloseBigImageElement.removeEventListener('click', onButtonCloseClick);
   document.body.removeEventListener('click', onButtonLoadClick);
 }
 
-const createCurrentComments = function (comments) {
+const createCurrentComments = (comments) => {
   const results = [];
 
   comments.forEach(({avatar, name, message}) => {
-    const imageElement = commentListDataTemplate.cloneNode(true);
+    const imageElement = commentListDataTemplateElement.cloneNode(true);
     imageElement.querySelector('.social__picture').setAttribute('src', avatar);
     imageElement.querySelector('.social__picture').setAttribute('alt', name);
     imageElement.querySelector('.social__text').textContent = message;
@@ -84,29 +84,29 @@ const createCurrentComments = function (comments) {
   return results;
 };
 
-const showPostPreview = function ({url, likes, comments, description}) {
-  urlData.querySelector('img').setAttribute('src', url);
-  likeData.textContent = likes;
-  commentData.textContent = comments.length;
-  descriptionData.textContent = description;
+const showPostPreview = ({url, likes, comments, description}) => {
+  urlDataElement.querySelector('img').setAttribute('src', url);
+  likeDataElement.textContent = likes;
+  commentDataElement.textContent = comments.length;
+  descriptionDataElement.textContent = description;
 
   commentsList = createCurrentComments(comments);
 
   if (commentsList.length <= DISPLAYED_CURRENT_COMMENT_COUNT) {
     commentsList.forEach((commentItem) => {
-      imageFragment.appendChild(commentItem);
+      imageFragmentElement.appendChild(commentItem);
     });
-    commentListData.appendChild(imageFragment);
-    commentCurrent.textContent = commentsList.length;
-    buttonCommentsLoad.classList.add('hidden');
+    commentListDataElement.appendChild(imageFragmentElement);
+    commentCurrentElement.textContent = commentsList.length;
+    buttonCommentsLoadElement.classList.add('hidden');
   }
 
   displayedComments = commentsList.slice(0, DISPLAYED_CURRENT_COMMENT_COUNT);
   displayedComments.forEach((commentItem) => {
-    imageFragment.appendChild(commentItem);
+    imageFragmentElement.appendChild(commentItem);
   });
-  commentListData.appendChild(imageFragment);
-  commentCurrent.textContent = displayedComments.length;
+  commentListDataElement.appendChild(imageFragmentElement);
+  commentCurrentElement.textContent = displayedComments.length;
 };
 
 export {showBigImage, showPostPreview};
