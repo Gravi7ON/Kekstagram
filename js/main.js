@@ -14,6 +14,10 @@ loadData()
       getImageWrapper(posts);
       imgFiltersBlockElement.classList.remove('img-filters--inactive');
 
+      imgFiltersFormElement.addEventListener('click', (evt) => {
+        setActiveFilter(evt);
+      });
+
       imgFiltersFormElement.addEventListener('click', debounce((evt) => {
         const activeFilter = setActiveFilter(evt);
         if(!activeFilter) {
